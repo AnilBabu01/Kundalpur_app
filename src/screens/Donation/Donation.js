@@ -109,16 +109,8 @@ function Donation() {
             const url =
               'https://paymentkundalpur.techjainsupport.co.in/about?order_id=' +
               res.data.id;
-
-            Linking.canOpenURL(url)
-              .then(supported => {
-                if (!supported) {
-                  console.log("Can't handle url: " + url);
-                } else {
-                  return Linking.openURL(url);
-                }
-              })
-              .catch(err => console.error('An error occurred', err));
+            const supported = await Linking.canOpenURL(url);
+            await Linking.openURL(url);
           }
           console.log(res);
         })

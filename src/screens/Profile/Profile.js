@@ -10,10 +10,9 @@ import {
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useRoute} from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
-import UserAvatar from 'react-native-user-avatar';
-import {serverInstance} from '../../API/ServerInstance';
 import {backendUrl} from '../../Config/config';
 import moment from 'moment';
+import profileimg from '../../assets/profileimg.jpg';
 const windowHeight = Dimensions.get('window').height;
 const Profile = ({navigation}) => {
   const [user, setuser] = useState('');
@@ -28,12 +27,20 @@ const Profile = ({navigation}) => {
       <View style={styles.connainer}>
         <View style={[styles.card, styles.elevation]}>
           <View style={styles.imgview}>
-            <Image
-              source={{
-                uri: `${backendUrl}uploads/images/${user?.profile_image}`,
-              }}
-              style={styles.avator}
-            />
+            {user?.profile_image ? (
+              <>
+                <Image
+                  source={{
+                    uri: `${backendUrl}uploads/images/${user?.profile_image}`,
+                  }}
+                  style={styles.avator}
+                />
+              </>
+            ) : (
+              <>
+                <Image source={profileimg} style={styles.avator} />
+              </>
+            )}
             <View>
               <Text style={styles.heading}>
                 *****{user?.mobileNo && user?.mobileNo.slice(4, 9)}

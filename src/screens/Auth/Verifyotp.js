@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Text,
   View,
@@ -7,15 +7,73 @@ import {
   Dimensions,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
+import {serverInstance} from '../../API/ServerInstance';
+import {useRoute} from '@react-navigation/native';
 import {OTP} from 'react-native-otp-form';
 import {Height, Width} from '../../utils/responsive';
 import loginicon from '../../assets/loginiconss.png';
 import {primary, secondary, textcolor} from '../../utils/Colors';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import Loader from '../../Conponents/Loader';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const Verifyotp = ({navigation}) => {
-  const [index, setIndex] = useState(0);
+  const route = useRoute();
+  const [visible, setvisible] = useState(false);
+  const [message, setmessage] = useState('');
+  const [mobilemo, setmobilemo] = useState('');
+  const [otp, setotp] = useState('');
+
+  const createThreeButtonAlert = title =>
+    Alert.alert('Authentication', title, [
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancel Pressed'),
+        style: 'cancel',
+      },
+      {text: 'OK', onPress: () => console.log('OK Pressed')},
+    ]);
+  const handleVerify = () => {
+    try {
+      setvisible(true);
+      setmessage('Loging...');
+      serverInstance('user/verify-opt', 'POST', {
+        username: mobilemo,
+        otp: otp,
+      })
+        .then(async res => {
+          if (res.tokens) {
+            await AsyncStorage.setItem('token', res.tokens.access.token);
+            createThreeButtonAlert('You Have Login Successfully');
+            setvisible(false);
+            if (res.user?.name === null) {
+              navigation.navigate('CompleteProfile');
+            } else {
+              navigation.navigate('Drawer');
+            }
+
+            console.log(res.user?.name);
+          }
+          if (res.code === 406) {
+            createThreeButtonAlert(res.message);
+            setvisible(false);
+          }
+        })
+        .catch(error => {
+          console.log(error.message);
+          setvisible(false);
+        });
+    } catch (error) {
+      console.log(error);
+      setvisible(false);
+    }
+  };
+
+  useEffect(() => {
+    setmobilemo(route.params?.mobile);
+  }, []);
 
   return (
     <ScrollView>
@@ -28,15 +86,17 @@ const Verifyotp = ({navigation}) => {
           <View style={styles.textcenter}>
             <Text style={styles.textwe}>We have send the OTP to Your</Text>
             <Text style={styles.textwe}>mobile number</Text>
-            <Text style={styles.textwenum}>+623636565632</Text>
+            <Text style={styles.textwenum}>{mobilemo && mobilemo}</Text>
           </View>
           <OTP
             codeCount={6}
             containerStyle={{marginTop: 30, marginBottom: 80}}
             otpStyles={{backgroundColor: '#e'}}
+            onFinish={text => setotp(text)}
+            keyboardType="number-pad"
           />
           <View style={styles.loginbtndiv}>
-            <TouchableOpacity onPress={() => navigation.navigate('Drawer')}>
+            <TouchableOpacity onPress={() => handleVerify()}>
               <View style={styles.loginbtn}>
                 <Text style={styles.logintextstyle}>Login</Text>
               </View>
@@ -44,6 +104,7 @@ const Verifyotp = ({navigation}) => {
           </View>
         </View>
       </View>
+      <Loader visible={visible} message={message} />
     </ScrollView>
   );
 };

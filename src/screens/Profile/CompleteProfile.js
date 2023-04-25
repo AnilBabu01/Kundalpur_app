@@ -25,12 +25,18 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useRoute} from '@react-navigation/native';
 import {serverInstance} from '../../API/ServerInstance';
-import {backendUrl} from '../../Config/config';
+import {backendUrl, backendApiUrl} from '../../Config/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import moment from 'moment';
+import Loader from '../../Conponents/Loader';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
-const Updateprofile = ({navigation}) => {
+const formData = new FormData();
+const CompleteProfile = ({navigation}) => {
   const route = useRoute();
+  const [visible, setvisible] = useState(false);
+  const [message, setmessage] = useState('');
   const [imageUri, setImageUri] = useState('');
   const [profileimg, setprofileimg] = useState('');
   const [fullnamde, setfullnamde] = useState('');
@@ -44,12 +50,54 @@ const Updateprofile = ({navigation}) => {
   const [openModel, setopenModel] = useState(false);
   const [openModel1, setopenModel1] = useState(false);
   const [index, setIndex] = useState(0);
-  const [user, setuser] = useState('');
 
-  const HandleUpdate = () => {};
+  const [user, setuser] = useState('');
+  const getProfile = () => {
+    try {
+      serverInstance(`user/profile-list`, 'get').then(res => {
+        if (res?.profile) {
+          setuser(res?.profile);
+        }
+      });
+    } catch (error) {}
+  };
+
+  console.log(user);
+  useEffect(() => {
+    getProfile();
+  }, []);
+  const HandleComplete = async () => {
+    try {
+      let token = await AsyncStorage.getItem('token');
+      console.log('ss');
+      // formData.set('name', fullnamde);
+      // formData.set('mobile', mobile);
+      // formData.set('email', email);
+      // formData.set('dob', dateofbirth);
+      // formData.set('anniversary_date', anniversary);
+      // formData.set('address', address);
+      // formData.set('profile_image', profileimg);
+      // formData.set('sign', signatureimg);
+
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      let res = await axios.post(
+        `${backendApiUrl}user/update-profile`,
+        formData,
+        config,
+      );
+
+      console.log(res);
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   useEffect(() => {
-    setuser(route.params?.user);
     setfullnamde(user?.name);
     setemail(user?.email);
     setaddress(user?.address);
@@ -107,8 +155,7 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
-
-        console.log(Response.assets[0]);
+        setprofileimg(Response.assets[0]);
         setopenModel(false);
       }
     });
@@ -131,8 +178,7 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
-
-        console.log(Response.assets[0]);
+        setprofileimg(Response.assets[0]);
         setopenModel(false);
       }
     });
@@ -155,7 +201,7 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
-        console.log(Response.assets[0]);
+        setsignatureimg(Response.assets[0]);
         setopenModel1(false);
       }
     });
@@ -178,7 +224,7 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
-        console.log(Response.assets[0]);
+        setsignatureimg(Response.assets[0]);
         setopenModel1(false);
       }
     });
@@ -573,18 +619,19 @@ const Updateprofile = ({navigation}) => {
           )}
         </View>
         <View style={styles.loginbtndiv}>
-          <TouchableOpacity onPress={() => navigation.navigate('OnBoarding')}>
+          <TouchableOpacity onPress={() => HandleComplete()}>
             <View style={styles.loginbtn}>
-              <Text style={styles.logintextstyle}>Update</Text>
+              <Text style={styles.logintextstyle}>Save Profile</Text>
             </View>
           </TouchableOpacity>
         </View>
+        <Loader visible={visible} message={message} />
       </View>
     </ScrollView>
   );
 };
 
-export default Updateprofile;
+export default CompleteProfile;
 
 const styles = StyleSheet.create({
   avatorcontainer: {

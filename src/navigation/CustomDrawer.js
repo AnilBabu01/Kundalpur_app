@@ -7,6 +7,7 @@ import {donationavtivebtn} from '../utils/Colors';
 import {serverInstance} from '../API/ServerInstance';
 import {backendUrl} from '../Config/config';
 import Loader from '../Conponents/Loader';
+import profileimg from '../assets/profileimg.jpg';
 function CustomDrawer(props) {
   const {navigation} = props;
   const [user, setuser] = useState('');
@@ -58,16 +59,32 @@ function CustomDrawer(props) {
             alignItems: 'center',
             paddingVertical: 24,
           }}>
-          <Image
-            source={{
-              uri: `${backendUrl}uploads/images/${user?.profile_image}`,
-            }}
-            style={{
-              width: 80,
-              height: 80,
-              borderRadius: 50,
-            }}
-          />
+          {user?.profile_image ? (
+            <>
+              <Image
+                source={{
+                  uri: `${backendUrl}uploads/images/${user?.profile_image}`,
+                }}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 50,
+                }}
+              />
+            </>
+          ) : (
+            <>
+              <Image
+                source={profileimg}
+                style={{
+                  width: 80,
+                  height: 80,
+                  borderRadius: 50,
+                }}
+              />
+            </>
+          )}
+
           <Text style={{color: 'white'}}>{user?.name}</Text>
         </View>
       </View>

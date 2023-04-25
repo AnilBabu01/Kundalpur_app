@@ -51,9 +51,9 @@ const Login = ({navigation}) => {
     ]);
   const handlelogin = async () => {
     try {
-      // setvisible(true);
-      // setmessage('Loging...');
       if (showloginoption === false) {
+        setvisible(true);
+        setmessage('Loging...');
         let res = await axios.post(`${backendApiUrl}user/login`, {
           identity: email,
           password: password,
@@ -67,23 +67,30 @@ const Login = ({navigation}) => {
         }
       }
       if (showloginoption === true) {
+        console.log(mobile);
+        setvisible(true);
+        setmessage('Getting Otp...');
         serverInstance('user/login-with-mobile', 'POST', {
           mobile_no: mobile,
         })
           .then(res => {
             if (res.status === 1) {
               createThreeButtonAlert('OTP Sent Successfully');
-              //  navigation.navigate('Verifyotp',{mobile})
+              navigation.navigate('Verifyotp', {mobile});
+              setvisible(false);
             } else {
               createThreeButtonAlert(res.message);
+              setvisible(false);
             }
           })
           .catch(error => {
             console.log(error);
+            setvisible(false);
           });
       }
     } catch (error) {
       createThreeButtonAlert('Wrong email or password');
+      setvisible(false);
     }
   };
   var reg =

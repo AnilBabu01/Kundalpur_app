@@ -13,6 +13,7 @@ import VerificationForgotScreen from '../screens/Auth/VerificationForgot';
 import ResetPasswordScreen from '../screens/Auth/ResetPassword';
 import ChangePasswordScreen from '../screens/Auth/ChangePassword';
 import UpdateprofileScreen from '../screens/Profile/Updateprofile';
+import CompleteProfileScreen from '../screens/Profile/CompleteProfile';
 import {donationavtivebtn} from '../utils/Colors';
 const Stack = createNativeStackNavigator();
 
@@ -67,6 +68,13 @@ function StackNavigation() {
           headerTitleStyle: {
             fontWeight: 'bold',
           },
+        }}
+      />
+      <Stack.Screen
+        name="CompleteProfile"
+        component={CompleteProfileScreen}
+        options={{
+          headerShown: false,
         }}
       />
     </Stack.Navigator>

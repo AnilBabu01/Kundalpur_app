@@ -7,10 +7,10 @@ import {
 } from 'react-native';
 import React, {useState, useEffect} from 'react';
 import Logo from '../../assets/logo1.png';
-import UserAvatar from 'react-native-user-avatar';
 import {useNavigation} from '@react-navigation/native';
 import {serverInstance} from '../../API/ServerInstance';
 import {backendUrl} from '../../Config/config';
+import profileimg from '../../assets/profileimg.jpg';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const ProfileHeader = () => {
@@ -25,6 +25,8 @@ const ProfileHeader = () => {
       });
     } catch (error) {}
   };
+
+  console.log(user);
   useEffect(() => {
     getProfile();
   }, []);
@@ -32,12 +34,20 @@ const ProfileHeader = () => {
     <View style={styles.profile}>
       <Image source={Logo} style={{width: 50, height: 50}} />
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <Image
-          source={{
-            uri: `${backendUrl}uploads/images/${user?.profile_image}`,
-          }}
-          style={styles.avator}
-        />
+        {user?.profile_image ? (
+          <>
+            <Image
+              source={{
+                uri: `${backendUrl}uploads/images/${user?.profile_image}`,
+              }}
+              style={styles.avator}
+            />
+          </>
+        ) : (
+          <>
+            <Image source={profileimg} style={styles.avator} />
+          </>
+        )}
       </TouchableOpacity>
     </View>
   );

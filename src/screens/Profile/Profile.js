@@ -5,6 +5,7 @@ import {
   ScrollView,
   Dimensions,
   TouchableOpacity,
+  Image,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useRoute} from '@react-navigation/native';
@@ -27,10 +28,11 @@ const Profile = ({navigation}) => {
       <View style={styles.connainer}>
         <View style={[styles.card, styles.elevation]}>
           <View style={styles.imgview}>
-            <UserAvatar
-              size={60}
-              name="Avishay Bar"
-              src={`${backendUrl}uploads/images/${user?.profile_image}`}
+            <Image
+              source={{
+                uri: `${backendUrl}uploads/images/${user?.profile_image}`,
+              }}
+              style={styles.avator}
             />
             <View>
               <Text style={styles.heading}>
@@ -148,5 +150,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+  },
+  avator: {
+    width: 60,
+    height: 60,
+    borderRadius: 50,
   },
 });

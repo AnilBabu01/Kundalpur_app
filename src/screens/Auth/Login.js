@@ -12,17 +12,26 @@ import {
   TextInput,
   Alert,
 } from 'react-native';
+import {serverInstance} from '../../API/ServerInstance';
 import {Height, Width} from '../../utils/responsive';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import axios from 'axios';
-import jwt_decode from 'jwt-decode';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {backendApiUrl} from '../../Config/config';
 import loginicon from '../../assets/loginiconss.png';
-import {primary, secondary, textcolor} from '../../utils/Colors';
+import {
+  primary,
+  secondary,
+  textcolor,
+  donationavtivebtn,
+  donationbtnunactiveborder,
+} from '../../utils/Colors';
+import Loader from '../../Conponents/Loader';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const Login = ({navigation}) => {
+  const [visible, setvisible] = useState(false);
+  const [message, setmessage] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [index, setIndex] = useState(0);
   const [showloginoption, setshowloginoption] = useState(false);
@@ -30,6 +39,7 @@ const Login = ({navigation}) => {
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
+  const [mobile, setmobile] = useState('');
   const createThreeButtonAlert = title =>
     Alert.alert('Authentication', title, [
       {
@@ -41,15 +51,36 @@ const Login = ({navigation}) => {
     ]);
   const handlelogin = async () => {
     try {
-      let res = await axios.post(`${backendApiUrl}user/login`, {
-        identity: email,
-        password: password,
-      });
+      // setvisible(true);
+      // setmessage('Loging...');
+      if (showloginoption === false) {
+        let res = await axios.post(`${backendApiUrl}user/login`, {
+          identity: email,
+          password: password,
+        });
 
-      if (res.data.status) {
-        await AsyncStorage.setItem('token', res.data.tokens.access.token);
-        createThreeButtonAlert('You have login successfully');
-        navigation.navigate('Drawer');
+        if (res.data.status) {
+          await AsyncStorage.setItem('token', res.data.tokens.access.token);
+          createThreeButtonAlert('You have login successfully');
+          navigation.navigate('Drawer');
+          setvisible(false);
+        }
+      }
+      if (showloginoption === true) {
+        serverInstance('user/login-with-mobile', 'POST', {
+          mobile_no: mobile,
+        })
+          .then(res => {
+            if (res.status === 1) {
+              createThreeButtonAlert('OTP Sent Successfully');
+              //  navigation.navigate('Verifyotp',{mobile})
+            } else {
+              createThreeButtonAlert(res.message);
+            }
+          })
+          .catch(error => {
+            console.log(error);
+          });
       }
     } catch (error) {
       createThreeButtonAlert('Wrong email or password');
@@ -93,7 +124,7 @@ const Login = ({navigation}) => {
 
   return (
     <SafeAreaView>
-      <StatusBar backgroundColor={'#FB9034'} />
+      <StatusBar backgroundColor={donationavtivebtn} />
       <ScrollView>
         <View style={styles.connainer}>
           <Image source={loginicon} style={styles.imgtop} />
@@ -103,12 +134,16 @@ const Login = ({navigation}) => {
           <View style={styles.btnsdiv}>
             <TouchableOpacity onPress={() => setshowloginoption(false)}>
               <View style={showloginoption ? styles.btn : styles.activebtn}>
-                <Text style={{color: textcolor}}>Email</Text>
+                <Text style={{color: showloginoption ? 'black' : 'white'}}>
+                  Email
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setshowloginoption(true)}>
               <View style={showloginoption ? styles.activebtn : styles.btn}>
-                <Text>Phone</Text>
+                <Text style={{color: showloginoption ? 'white' : 'black'}}>
+                  Phone
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -146,16 +181,14 @@ const Login = ({navigation}) => {
                     paddingHorizontal: Width(30),
                     fontSize: Height(16),
                   }}
-                  // secureTextEntry={passwordVisible}
                   // onBlur={() => Validation()}
-                  // onChangeText={text => setPassword(text)}
+                  onChangeText={text => setmobile(text)}
                   onPressIn={() => setIndex(2)}
                   onFocus={() => setIndex(2)}
                 />
               </View>
               <View style={styles.loginbtndiv}>
-                <TouchableOpacity
-                  onPress={() => navigation.navigate('Verifyotp')}>
+                <TouchableOpacity onPress={() => handlelogin()}>
                   <View style={styles.loginbtn}>
                     <Text style={styles.logintextstyle}>Login</Text>
                   </View>
@@ -289,6 +322,7 @@ const Login = ({navigation}) => {
             If doesn't have a account
             <Text style={{color: textcolor}}> Sign up</Text>
           </Text>
+          <Loader visible={visible} message={message} />
         </View>
       </ScrollView>
     </SafeAreaView>
@@ -345,11 +379,13 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 
   loginbtn: {
     width: Width(315),
-    height: Height(40),
+    height: Height(45),
     backgroundColor: textcolor,
     borderRadius: 10,
     display: 'flex',
@@ -366,7 +402,6 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 700,
     fontSize: 25,
-    lineHeight: 42,
   },
   forgottext: {
     color: textcolor,

@@ -6,11 +6,16 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {donationavtivebtn} from '../utils/Colors';
 import {serverInstance} from '../API/ServerInstance';
 import {backendUrl} from '../Config/config';
+import Loader from '../Conponents/Loader';
 function CustomDrawer(props) {
   const {navigation} = props;
   const [user, setuser] = useState('');
+  const [visible, setvisible] = useState(false);
+  const [message, setmessage] = useState('');
   const logout = async () => {
     try {
+      setvisible(true);
+      setmessage('Logout...');
       await AsyncStorage.removeItem('token');
       navigation.navigate('Login');
       navigation.closeDrawer();
@@ -104,6 +109,7 @@ function CustomDrawer(props) {
         onPress={() => logout()}
         labelStyle={{color: 'black'}}
       />
+      <Loader visible={visible} message={message} />
     </DrawerContentScrollView>
   );
 }

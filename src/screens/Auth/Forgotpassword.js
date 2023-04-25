@@ -37,12 +37,16 @@ const Forgotpassword = ({navigation}) => {
           <View style={styles.btnsdiv}>
             <TouchableOpacity onPress={() => setshowloginoption(false)}>
               <View style={showloginoption ? styles.btn : styles.activebtn}>
-                <Text style={{color: textcolor}}>Email</Text>
+                <Text style={{color: showloginoption ? 'black' : 'white'}}>
+                  Email
+                </Text>
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setshowloginoption(true)}>
               <View style={showloginoption ? styles.activebtn : styles.btn}>
-                <Text>Phone</Text>
+                <Text style={{color: showloginoption ? 'white' : 'black'}}>
+                  Phone
+                </Text>
               </View>
             </TouchableOpacity>
           </View>
@@ -203,6 +207,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 10,
+    paddingLeft: 10,
+    paddingRight: 10,
   },
 
   loginbtn: {

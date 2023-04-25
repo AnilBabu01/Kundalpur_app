@@ -739,7 +739,7 @@ const styles = StyleSheet.create({
 
   dropdown: {
     marginTop: 10,
-    height: 50,
+    height: 45,
     backgroundColor: 'white',
     borderRadius: 12,
     padding: 12,
@@ -778,18 +778,22 @@ const styles = StyleSheet.create({
   },
   donationButton: {
     backgroundColor: donationavtivebtn,
-    padding: 10,
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 10,
     borderRadius: 10,
     width: '45%',
+    height: 40,
   },
   donationButtonUnactive: {
-    padding: 10,
+    display: 'flex',
+    justifyContent: 'center',
     alignItems: 'center',
     marginVertical: 10,
     borderRadius: 10,
     width: '45%',
+    height: 40,
     opacity: 0.7,
     borderWidth: 1.5,
     borderColor: donationbtnunactiveborder,
@@ -820,6 +824,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Gilroy-SemiBold',
     paddingHorizontal: Width(30),
     fontSize: Height(16),
+    height: 45,
   },
   rupeesButton: {
     backgroundColor: donationavtivebtn,
@@ -892,11 +897,11 @@ const styles = StyleSheet.create({
   AmoutBtnActive: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 10,
+    fontSize: 11,
   },
   UnAmountBtn: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 10,
+    fontSize: 11,
   },
 });

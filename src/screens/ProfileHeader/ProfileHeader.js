@@ -32,10 +32,11 @@ const ProfileHeader = () => {
     <View style={styles.profile}>
       <Image source={Logo} style={{width: 50, height: 50}} />
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
-        <UserAvatar
-          size={50}
-          name="Avishay Bar"
-          src={`${backendUrl}uploads/images/${user?.profile_image}`}
+        <Image
+          source={{
+            uri: `${backendUrl}uploads/images/${user?.profile_image}`,
+          }}
+          style={styles.avator}
         />
       </TouchableOpacity>
     </View>
@@ -56,5 +57,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 15,
     paddingRight: 15,
+  },
+  avator: {
+    width: 50,
+    height: 50,
+    borderRadius: 50,
   },
 });

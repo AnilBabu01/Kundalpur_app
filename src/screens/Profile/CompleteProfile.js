@@ -43,15 +43,16 @@ const CompleteProfile = ({navigation}) => {
   const [email, setemail] = useState('');
   const [address, setaddress] = useState('');
   const [mobile, setmobile] = useState('');
-  const [dateofbirth, setdateofbirth] = useState();
-  const [anniversary, setanniversary] = useState();
+  const [dateofbirth, setdateofbirth] = useState('');
+  const [anniversary, setanniversary] = useState('');
   const [signatureimg, setsignatureimg] = useState('');
   const [signatureimgUri, setsignatureimgUri] = useState('');
   const [openModel, setopenModel] = useState(false);
   const [openModel1, setopenModel1] = useState(false);
   const [index, setIndex] = useState(0);
-
   const [user, setuser] = useState('');
+
+  console.log(user);
   const getProfile = () => {
     try {
       serverInstance(`user/profile-list`, 'get').then(res => {
@@ -62,19 +63,23 @@ const CompleteProfile = ({navigation}) => {
     } catch (error) {}
   };
 
-  console.log(user);
   useEffect(() => {
     getProfile();
   }, []);
+  useEffect(() => {}, [user]);
   const HandleComplete = async () => {
     try {
+      setImageUri('');
+      setsignatureimgUri('');
+      setvisible(true);
+      setmessage('Profile Updating.....');
       let token = await AsyncStorage.getItem('token');
       console.log('ss');
       formData.append('name', fullnamde);
       formData.append('mobile', mobile);
       formData.append('email', email);
-      formData.append('dob', dateofbirth);
-      formData.append('anniversary_date', anniversary);
+      formData.append('dob', Date(dateofbirth));
+      formData.append('anniversary_date', Date(anniversary));
       formData.append('address', address);
       const config = {
         headers: {
@@ -87,13 +92,13 @@ const CompleteProfile = ({navigation}) => {
         formData,
         config,
       );
-
-      console.log(res);
-
-      // console.log(formData);
-    } catch (error) {
-      // console.log(error);
-    }
+      setvisible(false);
+      if (res.data.status) {
+        setvisible(false);
+        setmessage('');
+        navigation.navigate('Donation');
+      }
+    } catch (error) {}
   };
 
   useEffect(() => {
@@ -168,6 +173,8 @@ const CompleteProfile = ({navigation}) => {
         };
 
         formData.append('profile_image', file);
+
+        console.log(file);
       }
     });
   };
@@ -222,7 +229,6 @@ const CompleteProfile = ({navigation}) => {
       } else if (Response.error) {
         console.log('ImagePicker Error: ', Response.error);
       } else {
-        openModel1(false);
         setsignatureimgUri(Response.assets[0].uri);
         const source =
           Platform.OS === 'android'
@@ -257,7 +263,7 @@ const CompleteProfile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
-        openModel1(false);
+
         const source =
           Platform.OS === 'android'
             ? Response.assets[0].uri

@@ -25,20 +25,26 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useRoute} from '@react-navigation/native';
 import {serverInstance} from '../../API/ServerInstance';
-import {backendUrl} from '../../Config/config';
+import {backendUrl, backendApiUrl} from '../../Config/config';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 import moment from 'moment';
+import Loader from '../../Conponents/Loader';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+const formData = new FormData();
 const Updateprofile = ({navigation}) => {
   const route = useRoute();
+  const [visible, setvisible] = useState(false);
+  const [message, setmessage] = useState('');
   const [imageUri, setImageUri] = useState('');
   const [profileimg, setprofileimg] = useState('');
   const [fullnamde, setfullnamde] = useState('');
   const [email, setemail] = useState('');
   const [address, setaddress] = useState('');
   const [mobile, setmobile] = useState('');
-  const [dateofbirth, setdateofbirth] = useState();
-  const [anniversary, setanniversary] = useState();
+  const [dateofbirth, setdateofbirth] = useState('');
+  const [anniversary, setanniversary] = useState('');
   const [signatureimg, setsignatureimg] = useState('');
   const [signatureimgUri, setsignatureimgUri] = useState('');
   const [openModel, setopenModel] = useState(false);
@@ -46,7 +52,36 @@ const Updateprofile = ({navigation}) => {
   const [index, setIndex] = useState(0);
   const [user, setuser] = useState('');
 
-  const HandleUpdate = () => {};
+  const HandleComplete = async () => {
+    try {
+      setvisible(true);
+      setmessage('Profile Updating.....');
+      let token = await AsyncStorage.getItem('token');
+      console.log('ss');
+      formData.append('name', fullnamde);
+      formData.append('mobile', mobile);
+      formData.append('email', email);
+      formData.append('dob', Date(dateofbirth));
+      formData.append('anniversary_date', Date(anniversary));
+      formData.append('address', address);
+      const config = {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${token}`,
+        },
+      };
+      let res = await axios.post(
+        `${backendApiUrl}user/update-profile`,
+        formData,
+        config,
+      );
+      if (res.data.status) {
+        setvisible(false);
+        setmessage('');
+        navigation.navigate('Drawer');
+      }
+    } catch (error) {}
+  };
 
   useEffect(() => {
     setuser(route.params?.user);
@@ -56,7 +91,7 @@ const Updateprofile = ({navigation}) => {
     setmobile(user?.mobileNo);
     setdateofbirth(user?.dob);
     setanniversary(user?.anniversary_date);
-  }, []);
+  }, [user]);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -97,7 +132,7 @@ const Updateprofile = ({navigation}) => {
       maxWidth: 500,
       maxHeight: 500,
       quality: 0.5,
-      includeBase64: true,
+      // includeBase64: true,
     };
 
     launchImageLibrary(options, Response => {
@@ -108,8 +143,19 @@ const Updateprofile = ({navigation}) => {
       } else {
         setImageUri(Response.assets[0].uri);
 
-        console.log(Response.assets[0]);
-        setopenModel(false);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+
+        formData.append('profile_image', file);
       }
     });
   };
@@ -131,9 +177,19 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
 
-        console.log(Response.assets[0]);
-        setopenModel(false);
+        formData.append('profile_image', file);
       }
     });
   };
@@ -154,9 +210,20 @@ const Updateprofile = ({navigation}) => {
       } else if (Response.error) {
         console.log('ImagePicker Error: ', Response.error);
       } else {
+        openModel1(false);
         setsignatureimgUri(Response.assets[0].uri);
-        console.log(Response.assets[0]);
-        setopenModel1(false);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+        formData.append('sign', file);
       }
     });
   };
@@ -178,8 +245,20 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
-        console.log(Response.assets[0]);
-        setopenModel1(false);
+        openModel1(false);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+
+        formData.append('sign', file);
       }
     });
   };
@@ -573,12 +652,13 @@ const Updateprofile = ({navigation}) => {
           )}
         </View>
         <View style={styles.loginbtndiv}>
-          <TouchableOpacity onPress={() => navigation.navigate('OnBoarding')}>
+          <TouchableOpacity onPress={() => HandleComplete()}>
             <View style={styles.loginbtn}>
               <Text style={styles.logintextstyle}>Update</Text>
             </View>
           </TouchableOpacity>
         </View>
+        <Loader visible={visible} message={message} />
       </View>
     </ScrollView>
   );

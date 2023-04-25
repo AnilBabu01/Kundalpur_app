@@ -16,6 +16,7 @@ const windowHeight = Dimensions.get('window').height;
 const ProfileHeader = () => {
   const navigation = useNavigation();
   const [user, setuser] = useState('');
+
   const getProfile = () => {
     try {
       serverInstance(`user/profile-list`, 'get').then(res => {

@@ -70,15 +70,12 @@ const CompleteProfile = ({navigation}) => {
     try {
       let token = await AsyncStorage.getItem('token');
       console.log('ss');
-      // formData.set('name', fullnamde);
-      // formData.set('mobile', mobile);
-      // formData.set('email', email);
-      // formData.set('dob', dateofbirth);
-      // formData.set('anniversary_date', anniversary);
-      // formData.set('address', address);
-      // formData.set('profile_image', profileimg);
-      // formData.set('sign', signatureimg);
-
+      formData.append('name', fullnamde);
+      formData.append('mobile', mobile);
+      formData.append('email', email);
+      formData.append('dob', dateofbirth);
+      formData.append('anniversary_date', anniversary);
+      formData.append('address', address);
       const config = {
         headers: {
           'Content-Type': 'multipart/form-data',
@@ -92,8 +89,10 @@ const CompleteProfile = ({navigation}) => {
       );
 
       console.log(res);
+
+      // console.log(formData);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   };
 
@@ -145,7 +144,7 @@ const CompleteProfile = ({navigation}) => {
       maxWidth: 500,
       maxHeight: 500,
       quality: 0.5,
-      includeBase64: true,
+      // includeBase64: true,
     };
 
     launchImageLibrary(options, Response => {
@@ -155,8 +154,20 @@ const CompleteProfile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
-        setprofileimg(Response.assets[0]);
-        setopenModel(false);
+
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+
+        formData.append('profile_image', file);
       }
     });
   };
@@ -178,8 +189,19 @@ const CompleteProfile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
-        setprofileimg(Response.assets[0]);
-        setopenModel(false);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+
+        formData.append('profile_image', file);
       }
     });
   };
@@ -200,9 +222,20 @@ const CompleteProfile = ({navigation}) => {
       } else if (Response.error) {
         console.log('ImagePicker Error: ', Response.error);
       } else {
+        openModel1(false);
         setsignatureimgUri(Response.assets[0].uri);
-        setsignatureimg(Response.assets[0]);
-        setopenModel1(false);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+        formData.append('sign', file);
       }
     });
   };
@@ -224,8 +257,20 @@ const CompleteProfile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
-        setsignatureimg(Response.assets[0]);
-        setopenModel1(false);
+        openModel1(false);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+
+        formData.append('sign', file);
       }
     });
   };

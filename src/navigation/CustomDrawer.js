@@ -20,8 +20,10 @@ function CustomDrawer(props) {
       await AsyncStorage.removeItem('token');
       navigation.navigate('Login');
       navigation.closeDrawer();
+      setvisible(false);
     } catch (error) {
       console.log(error);
+      setvisible(false);
     }
   };
   const getProfile = () => {

@@ -94,32 +94,47 @@ function CustomDrawer(props) {
       <DrawerItem
         label="Profile"
         icon={() => <Ionicons name="person-circle-outline" size={20} />}
-        onPress={() => navigation.navigate('Profiles', {user})}
+        onPress={() => {
+          navigation.closeDrawer();
+          navigation.navigate('Profiles', {user});
+        }}
         labelStyle={{color: 'black'}}
       />
       <DrawerItem
         label="Histroy"
         icon={() => <Ionicons name="timer-outline" size={20} />}
-        onPress={() => navigation.navigate('Home')}
+        onPress={() => {
+          navigation.navigate('Home');
+          navigation.closeDrawer();
+        }}
         labelStyle={{color: 'black'}}
       />
 
       <DrawerItem
         label="Help Center"
         icon={() => <Ionicons name="help-circle-outline" size={20} />}
-        onPress={() => navigation.navigate('login')}
+        onPress={() => {
+          navigation.navigate('login');
+          navigation.closeDrawer();
+        }}
         labelStyle={{color: 'black'}}
       />
       <DrawerItem
         label="Change password"
         icon={() => <Ionicons name="lock-open-outline" size={20} />}
-        onPress={() => navigation.navigate('Changepassword')}
+        onPress={() => {
+          navigation.navigate('Changepassword');
+          navigation.closeDrawer();
+        }}
         labelStyle={{color: 'black'}}
       />
       <DrawerItem
         label="Privacy Policy"
         icon={() => <Ionicons name="lock-closed-outline" size={20} />}
-        onPress={() => navigation.navigate('login')}
+        onPress={() => {
+          navigation.closeDrawer();
+          navigation.navigate('login');
+        }}
         labelStyle={{color: 'black'}}
       />
       <DrawerItem

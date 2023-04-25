@@ -92,11 +92,11 @@ const CompleteProfile = ({navigation}) => {
         formData,
         config,
       );
-      setvisible(false);
+
       if (res.data.status) {
         setvisible(false);
         setmessage('');
-        navigation.navigate('Donation');
+        navigation.navigate('Drawer');
       }
     } catch (error) {}
   };
@@ -214,7 +214,7 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleChoosePhotoSignature = () => {
-    setopenModel(false);
+    setopenModel1(false);
     const options = {
       mediaType: 'photo',
       maxWidth: 500,
@@ -247,7 +247,7 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleTakePhotoSignature = () => {
-    setopenModel(false);
+    setopenModel1(false);
     const options = {
       mediaType: 'photo',
       maxWidth: 500,

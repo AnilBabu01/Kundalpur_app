@@ -91,7 +91,6 @@ const Verifyotp = ({navigation}) => {
           <OTP
             codeCount={6}
             containerStyle={{marginTop: 30, marginBottom: 80}}
-            otpStyles={{backgroundColor: '#e'}}
             onFinish={text => setotp(text)}
             keyboardType="number-pad"
           />

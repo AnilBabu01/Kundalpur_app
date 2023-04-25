@@ -1,11 +1,14 @@
-import React from 'react';
+import React, {useState, useEffect} from 'react';
 import {DrawerContentScrollView, DrawerItem} from '@react-navigation/drawer';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {View, Text, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {donationavtivebtn} from '../utils/Colors';
+import {serverInstance} from '../API/ServerInstance';
+import {backendUrl} from '../Config/config';
 function CustomDrawer(props) {
   const {navigation} = props;
-
+  const [user, setuser] = useState('');
   const logout = async () => {
     try {
       await AsyncStorage.removeItem('token');
@@ -15,13 +18,26 @@ function CustomDrawer(props) {
       console.log(error);
     }
   };
+  const getProfile = () => {
+    try {
+      serverInstance(`user/profile-list`, 'get').then(res => {
+        if (res?.profile) {
+          setuser(res?.profile);
+        }
+      });
+    } catch (error) {}
+  };
+  useEffect(() => {
+    getProfile();
+  }, []);
+
   return (
     <DrawerContentScrollView
-      style={{backgroundColor: '#FE7600', color: 'black'}}
+      style={{backgroundColor: donationavtivebtn, color: 'black'}}
       {...props}>
       <View
         style={{
-          backgroundColor: '#FE7600',
+          backgroundColor: donationavtivebtn,
           alignItems: 'center',
         }}>
         <Text
@@ -39,7 +55,7 @@ function CustomDrawer(props) {
           }}>
           <Image
             source={{
-              uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSwY32UfTuRe83OES2BQfrpqO_OiaCQXwHKUw&usqp=CAU',
+              uri: `${backendUrl}uploads/images/${user?.profile_image}`,
             }}
             style={{
               width: 80,
@@ -47,14 +63,14 @@ function CustomDrawer(props) {
               borderRadius: 50,
             }}
           />
-          <Text style={{color: 'white'}}>Anil Babu</Text>
+          <Text style={{color: 'white'}}>{user?.name}</Text>
         </View>
       </View>
 
       <DrawerItem
         label="Profile"
         icon={() => <Ionicons name="person-circle-outline" size={20} />}
-        onPress={() => navigation.navigate('Profiles')}
+        onPress={() => navigation.navigate('Profiles', {user})}
         labelStyle={{color: 'black'}}
       />
       <DrawerItem

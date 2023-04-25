@@ -7,10 +7,21 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-import React from 'react';
+import {useRoute} from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
 import UserAvatar from 'react-native-user-avatar';
+import {serverInstance} from '../../API/ServerInstance';
+import {backendUrl} from '../../Config/config';
+import moment from 'moment';
 const windowHeight = Dimensions.get('window').height;
 const Profile = ({navigation}) => {
+  const [user, setuser] = useState('');
+  const route = useRoute();
+
+  useEffect(() => {
+    setuser(route.params?.user);
+  }, []);
+
   return (
     <ScrollView>
       <View style={styles.connainer}>
@@ -19,16 +30,18 @@ const Profile = ({navigation}) => {
             <UserAvatar
               size={60}
               name="Avishay Bar"
-              src="https://dummyimage.com/100x100/000/fff"
+              src={`${backendUrl}uploads/images/${user?.profile_image}`}
             />
             <View>
-              <Text style={styles.heading}>******6956</Text>
-              <Text>7505786956</Text>
+              <Text style={styles.heading}>
+                *****{user?.mobileNo && user?.mobileNo.slice(4, 9)}
+              </Text>
+              <Text>{user?.mobileNo && user?.mobileNo}</Text>
             </View>
           </View>
 
           <TouchableOpacity
-            onPress={() => navigation.navigate('Updateprofile')}>
+            onPress={() => navigation.navigate('Updateprofile', {user})}>
             <View>
               <Ionicons name="arrow-forward-outline" size={40} />
             </View>
@@ -38,23 +51,37 @@ const Profile = ({navigation}) => {
         <View style={styles.card10}>
           <View style={styles.viewdel}>
             <Text>Full Name</Text>
-            <Text style={styles.deltext}>Anil babu</Text>
+            <Text style={styles.deltext}>
+              {user?.name ? user?.name : '****************'}
+            </Text>
           </View>
           <View style={styles.viewdel}>
             <Text>Email</Text>
-            <Text style={styles.deltext}>Anilb9850@gmail.com</Text>
+            <Text style={styles.deltext}>
+              {user?.email ? user?.email : '***************'}
+            </Text>
           </View>
           <View style={styles.viewdel}>
             <Text>Address</Text>
-            <Text style={styles.deltext}>Pilibhit bisalput up</Text>
+            <Text style={styles.deltext}>
+              {user?.Address ? user?.address : '****************'}
+            </Text>
           </View>
           <View style={styles.viewdel}>
             <Text>Date of Birth</Text>
-            <Text style={styles.deltext}>17/01/1998</Text>
+            <Text style={styles.deltext}>
+              {user?.dob
+                ? moment(user?.dob).format('DD/MM/YYYY')
+                : '****************'}
+            </Text>
           </View>
           <View style={styles.viewdel}>
             <Text>Anniversary date</Text>
-            <Text style={styles.deltext}>17/01/1998</Text>
+            <Text style={styles.deltext}>
+              {user?.anniversary_date
+                ? moment(user?.anniversary_date).format('DD/MM/YYYY')
+                : '******************'}
+            </Text>
           </View>
           {/* <View style={styles.viewdel}>
             <Text>Signature</Text>

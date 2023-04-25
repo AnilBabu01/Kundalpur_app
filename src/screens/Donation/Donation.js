@@ -11,6 +11,7 @@ import {
   Modal,
   Dimensions,
   Linking,
+  SafeAreaView,
 } from 'react-native';
 import {Height, Width} from '../../utils/responsive';
 import {serverInstance} from '../../API/ServerInstance';
@@ -18,7 +19,13 @@ import {Dropdown} from 'react-native-element-dropdown';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
-import {primary, secondary, textcolor} from '../../utils/Colors';
+import {
+  primary,
+  secondary,
+  textcolor,
+  donationavtivebtn,
+  donationbtnunactiveborder,
+} from '../../utils/Colors';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 const windowWidth = Dimensions.get('window').width;
@@ -273,7 +280,7 @@ function Donation() {
       </Modal>
       <ProfileHeader />
       <ScrollView>
-        <StatusBar backgroundColor={'#FE7600'} />
+        <StatusBar backgroundColor={donationavtivebtn} />
         <View style={styles.mainView}>
           <View style={styles.mainColorView}>
             <View style={styles.header}>
@@ -284,9 +291,9 @@ function Donation() {
                 />
                 <Text
                   style={{
-                    marginLeft: '17%',
+                    marginLeft: '20%',
                     fontWeight: '600',
-                    fontStyle: 'italic',
+                    // fontStyle: 'italic',
                     color: '#FA7401',
                     fontSize: 20,
                   }}>
@@ -313,11 +320,11 @@ function Donation() {
                   onPress={() => setsomeone('yes1')}>
                   <View>
                     <Text
-                      style={{
-                        color: '#fff',
-                        fontWeight: 'bold',
-                        fontSize: 17,
-                      }}>
+                      style={
+                        someone === 'yes1'
+                          ? styles.avtiveText
+                          : styles.unActiveText
+                      }>
                       Self
                     </Text>
                   </View>
@@ -332,11 +339,11 @@ function Donation() {
                   onPress={() => setsomeone('yes')}>
                   <View>
                     <Text
-                      style={{
-                        color: '#fff',
-                        fontWeight: 'bold',
-                        fontSize: 17,
-                      }}>
+                      style={
+                        someone === 'yes'
+                          ? styles.avtiveText
+                          : styles.unActiveText
+                      }>
                       Someone
                     </Text>
                   </View>
@@ -355,11 +362,11 @@ function Donation() {
                     onPress={() => setmode('online')}>
                     <View>
                       <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: 'bold',
-                          fontSize: 17,
-                        }}>
+                        style={
+                          mode === 'online'
+                            ? styles.avtiveText
+                            : styles.unActiveText
+                        }>
                         Online
                       </Text>
                     </View>
@@ -374,11 +381,11 @@ function Donation() {
                     onPress={() => setmode('cheque')}>
                     <View>
                       <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: 'bold',
-                          fontSize: 17,
-                        }}>
+                        style={
+                          mode === 'cheque'
+                            ? styles.avtiveText
+                            : styles.unActiveText
+                        }>
                         Cheque
                       </Text>
                     </View>
@@ -536,7 +543,7 @@ function Donation() {
                 {donationAmounts.map(item => (
                   <TouchableOpacity
                     onPress={() => setamount(item.value)}
-                    key={item.id}
+                    key={item.value}
                     style={
                       amount === item.value
                         ? styles.rupeesButton
@@ -544,11 +551,11 @@ function Donation() {
                     }>
                     <View>
                       <Text
-                        style={{
-                          color: '#fff',
-                          fontWeight: 'bold',
-                          fontSize: 10,
-                        }}>
+                        style={
+                          amount === item.value
+                            ? styles.AmoutBtnActive
+                            : styles.UnAmountBtn
+                        }>
                         {item.label}
                       </Text>
                     </View>
@@ -566,18 +573,7 @@ function Donation() {
                     }}>
                     Cheque No<Text style={{color: '#FF115E'}}> *</Text>
                   </Text>
-                  <View
-                    style={{
-                      width: Width(340),
-                      height: Height(50),
-                      alignSelf: 'center',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      borderWidth: 1.5,
-                      borderRadius: Width(10),
-                      borderColor: '#FE7600',
-                      marginTop: Height(10),
-                    }}>
+                  <View style={styles.chequeInputView}>
                     <TextInput
                       placeholder="Enter The Cheque No"
                       placeholderTextColor="rgba(0, 0, 0, 0.6)"
@@ -598,18 +594,7 @@ function Donation() {
                     }}>
                     Bank Name<Text style={{color: '#FF115E'}}> *</Text>
                   </Text>
-                  <View
-                    style={{
-                      width: Width(340),
-                      height: Height(50),
-                      alignSelf: 'center',
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      borderWidth: 1.5,
-                      borderRadius: Width(10),
-                      borderColor: '#FE7600',
-                      marginTop: Height(10),
-                    }}>
+                  <View style={styles.chequeInputView}>
                     <TextInput
                       placeholder="Enter The Bank Name"
                       placeholderTextColor="rgba(0, 0, 0, 0.6)"
@@ -632,17 +617,7 @@ function Donation() {
                     Date<Text style={{color: '#FF115E'}}> *</Text>
                   </Text>
                   <TouchableOpacity
-                    style={{
-                      height: Height(50),
-                      width: Width(340),
-                      borderWidth: 1.5,
-                      borderColor: '#FE7600',
-                      alignSelf: 'center',
-                      borderRadius: Width(10),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: Height(10),
-                    }}
+                    style={styles.chequeInputView}
                     onPress={() => {
                       showDatePicker();
                     }}>
@@ -679,17 +654,7 @@ function Donation() {
                     Upload Cheque<Text style={{color: '#FF115E'}}> *</Text>
                   </Text>
                   <TouchableOpacity
-                    style={{
-                      height: Height(50),
-                      width: Width(340),
-                      borderWidth: 1.5,
-                      borderColor: '#FE7600',
-                      alignSelf: 'center',
-                      borderRadius: Width(10),
-                      flexDirection: 'row',
-                      alignItems: 'center',
-                      marginTop: Height(10),
-                    }}
+                    style={styles.chequeInputView}
                     onPress={() => {
                       setopenModel(true);
                     }}>
@@ -780,7 +745,7 @@ const styles = StyleSheet.create({
     padding: 12,
     shadowColor: '#000',
     borderWidth: 1.5,
-    borderColor: '#FE7600',
+    borderColor: donationbtnunactiveborder,
     paddingHorizontal: Width(30),
   },
   icon: {
@@ -812,7 +777,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
   },
   donationButton: {
-    backgroundColor: '#FE7600',
+    backgroundColor: donationavtivebtn,
     padding: 10,
     alignItems: 'center',
     marginVertical: 10,
@@ -820,13 +785,24 @@ const styles = StyleSheet.create({
     width: '45%',
   },
   donationButtonUnactive: {
-    backgroundColor: '#FE7600',
     padding: 10,
     alignItems: 'center',
     marginVertical: 10,
     borderRadius: 10,
     width: '45%',
     opacity: 0.7,
+    borderWidth: 1.5,
+    borderColor: donationbtnunactiveborder,
+  },
+  avtiveText: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 17,
+  },
+  unActiveText: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 17,
   },
   selbtnview: {
     display: 'flex',
@@ -837,7 +813,7 @@ const styles = StyleSheet.create({
   customInputContainer: {
     marginVertical: 10,
     borderWidth: 1.5,
-    borderColor: '#FE7600',
+    borderColor: donationbtnunactiveborder,
     paddingHorizontal: 15,
     paddingVertical: 10,
     borderRadius: 10,
@@ -846,7 +822,7 @@ const styles = StyleSheet.create({
     fontSize: Height(16),
   },
   rupeesButton: {
-    backgroundColor: '#FE7600',
+    backgroundColor: donationavtivebtn,
     padding: 10,
     alignItems: 'center',
     marginVertical: 10,
@@ -855,7 +831,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
   },
   rupeesButtonUnactive: {
-    backgroundColor: '#FE7600',
+    borderColor: donationbtnunactiveborder,
+    borderWidth: 1.5,
     padding: 10,
     alignItems: 'center',
     marginVertical: 10,
@@ -900,5 +877,26 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginTop: 15,
+  },
+  chequeInputView: {
+    height: Height(50),
+    width: Width(340),
+    borderWidth: 1.5,
+    borderColor: donationbtnunactiveborder,
+    alignSelf: 'center',
+    borderRadius: Width(10),
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: Height(10),
+  },
+  AmoutBtnActive: {
+    color: '#fff',
+    fontWeight: 'bold',
+    fontSize: 10,
+  },
+  UnAmountBtn: {
+    color: 'black',
+    fontWeight: 'bold',
+    fontSize: 10,
   },
 });

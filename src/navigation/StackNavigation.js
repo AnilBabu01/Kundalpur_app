@@ -13,7 +13,7 @@ import VerificationForgotScreen from '../screens/Auth/VerificationForgot';
 import ResetPasswordScreen from '../screens/Auth/ResetPassword';
 import ChangePasswordScreen from '../screens/Auth/ChangePassword';
 import UpdateprofileScreen from '../screens/Profile/Updateprofile';
-
+import {donationavtivebtn} from '../utils/Colors';
 const Stack = createNativeStackNavigator();
 
 function StackNavigation() {
@@ -46,7 +46,7 @@ function StackNavigation() {
           headerShown: true,
           title: 'Profile',
           headerStyle: {
-            backgroundColor: '#FB9034',
+            backgroundColor: donationavtivebtn,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {
@@ -61,7 +61,7 @@ function StackNavigation() {
           headerShown: true,
           title: 'Edit Profile',
           headerStyle: {
-            backgroundColor: '#FB9034',
+            backgroundColor: donationavtivebtn,
           },
           headerTintColor: '#fff',
           headerTitleStyle: {

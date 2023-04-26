@@ -27,13 +27,13 @@ const ProfileHeader = () => {
     } catch (error) {}
   };
 
-  console.log(user);
   useEffect(() => {
     getProfile();
   }, []);
+
   return (
     <View style={styles.profile}>
-      <Image source={Logo} style={{width: 50, height: 50}} />
+      <Image source={Logo} style={{width: 40, height: 40}} />
       <TouchableOpacity onPress={() => navigation.openDrawer()}>
         {user?.profile_image ? (
           <>
@@ -59,7 +59,7 @@ export default ProfileHeader;
 const styles = StyleSheet.create({
   profile: {
     width: windowWidth,
-    height: windowHeight / 10,
+    height: windowHeight / 17,
     backgroundColor: '#FFFFFF',
     boxShadow: '0px 4px 4px rgba(0, 0, 0, 0.1)',
     display: 'flex',
@@ -70,8 +70,8 @@ const styles = StyleSheet.create({
     paddingRight: 15,
   },
   avator: {
-    width: 50,
-    height: 50,
+    width: 40,
+    height: 40,
     borderRadius: 50,
   },
 });

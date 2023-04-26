@@ -239,6 +239,7 @@ function Donation() {
     getall_donatiions();
     getProfile();
   }, []);
+  useEffect(() => {}, [user]);
 
   const renderItem = item => {
     return (

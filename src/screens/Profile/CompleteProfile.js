@@ -74,12 +74,12 @@ const CompleteProfile = ({navigation}) => {
       setvisible(true);
       setmessage('Profile Updating.....');
       let token = await AsyncStorage.getItem('token');
-      console.log('ss');
+
       formData.append('name', fullnamde);
       formData.append('mobile', mobile);
       formData.append('email', email);
-      formData.append('dob', Date(dateofbirth));
-      formData.append('anniversary_date', Date(anniversary));
+      formData.append('dob', dateofbirth?.toString());
+      formData.append('anniversary_date', anniversary?.toString());
       formData.append('address', address);
       const config = {
         headers: {
@@ -96,7 +96,7 @@ const CompleteProfile = ({navigation}) => {
       if (res.data.status) {
         setvisible(false);
         setmessage('');
-        navigation.navigate('Drawer');
+        navigation.navigate('Donation');
       }
     } catch (error) {}
   };
@@ -108,7 +108,7 @@ const CompleteProfile = ({navigation}) => {
     setmobile(user?.mobileNo);
     setdateofbirth(user?.dob);
     setanniversary(user?.anniversary_date);
-  }, []);
+  }, [user]);
 
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -121,7 +121,7 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleConfirm = date => {
-    console.log('A date has been picked: ', date);
+    console.log('A date has been picked: ', JSON.stringify(date));
     hideDatePicker();
     setanniversary(date);
   };
@@ -137,7 +137,7 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleConfirmdob = date => {
-    console.log('A date has been picked: ', date);
+    console.log('A date has been picked: ', JSON.stringify(date));
     hideDatePickerdob();
     setdateofbirth(date);
   };
@@ -172,9 +172,9 @@ const CompleteProfile = ({navigation}) => {
           type: type,
         };
 
-        formData.append('profile_image', file);
-
-        console.log(file);
+        if (file != null) {
+          formData.append('profile_image', file);
+        }
       }
     });
   };
@@ -208,7 +208,9 @@ const CompleteProfile = ({navigation}) => {
           type: type,
         };
 
-        formData.append('profile_image', file);
+        if (file != null) {
+          formData.append('profile_image', file);
+        }
       }
     });
   };
@@ -241,7 +243,9 @@ const CompleteProfile = ({navigation}) => {
           name: name,
           type: type,
         };
-        formData.append('sign', file);
+        if (file != null) {
+          formData.append('sign', file);
+        }
       }
     });
   };
@@ -276,7 +280,9 @@ const CompleteProfile = ({navigation}) => {
           type: type,
         };
 
-        formData.append('sign', file);
+        if (file != null) {
+          formData.append('sign', file);
+        }
       }
     });
   };

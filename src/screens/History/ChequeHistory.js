@@ -9,11 +9,11 @@ const ChequeHistory = () => {
   const [visible, setvisible] = useState(false);
   const [message, setmessage] = useState('');
   const gettable = () => {
-    setvisible(true);
-    setmessage('Data Loading....');
+    // setvisible(true);
+    // setmessage('Data Loading....');
     serverInstance('user/donation-list', 'get').then(res => {
       if (res.donation) {
-        setvisible(false);
+        // setvisible(false);
         setisData(res.donation);
       }
     });

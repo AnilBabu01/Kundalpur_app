@@ -38,6 +38,7 @@ function CustomDrawer(props) {
   useEffect(() => {
     getProfile();
   }, []);
+  useEffect(() => {}, [user]);
 
   return (
     <DrawerContentScrollView

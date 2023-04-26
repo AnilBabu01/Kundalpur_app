@@ -14,6 +14,7 @@ import ResetPasswordScreen from '../screens/Auth/ResetPassword';
 import ChangePasswordScreen from '../screens/Auth/ChangePassword';
 import UpdateprofileScreen from '../screens/Profile/Updateprofile';
 import CompleteProfileScreen from '../screens/Profile/CompleteProfile';
+import ViewReceiptScreen from '../screens/History/ViewReceipt';
 import {donationavtivebtn} from '../utils/Colors';
 const Stack = createNativeStackNavigator();
 
@@ -89,6 +90,21 @@ function StackNavigation() {
         component={CompleteProfileScreen}
         options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="View"
+        component={ViewReceiptScreen}
+        options={{
+          headerShown: true,
+          title: 'Details',
+          headerStyle: {
+            backgroundColor: donationavtivebtn,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
         }}
       />
     </Stack.Navigator>

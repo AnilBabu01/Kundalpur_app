@@ -61,8 +61,8 @@ const Updateprofile = ({navigation}) => {
       formData.append('name', fullnamde);
       formData.append('mobile', mobile);
       formData.append('email', email);
-      formData.append('dob', Date(dateofbirth));
-      formData.append('anniversary_date', Date(anniversary));
+      formData.append('dob', dateofbirth?.toString());
+      formData.append('anniversary_date', anniversary?.toString());
       formData.append('address', address);
       const config = {
         headers: {
@@ -78,7 +78,8 @@ const Updateprofile = ({navigation}) => {
       if (res.data.status) {
         setvisible(false);
         setmessage('');
-        navigation.navigate('Drawer');
+        navigation.navigate('Donation');
+        console.log('updatwe', res.data);
       }
     } catch (error) {}
   };
@@ -92,7 +93,7 @@ const Updateprofile = ({navigation}) => {
     setdateofbirth(user?.dob);
     setanniversary(user?.anniversary_date);
   }, [user]);
-
+  console.log(user);
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -154,8 +155,9 @@ const Updateprofile = ({navigation}) => {
           name: name,
           type: type,
         };
-
-        formData.append('profile_image', file);
+        if (file) {
+          formData.append('profile_image', file);
+        }
       }
     });
   };
@@ -189,13 +191,15 @@ const Updateprofile = ({navigation}) => {
           type: type,
         };
 
-        formData.append('profile_image', file);
+        if (file) {
+          formData.append('profile_image', file);
+        }
       }
     });
   };
 
   const handleChoosePhotoSignature = () => {
-    setopenModel(false);
+    setopenModel1(false);
     const options = {
       mediaType: 'photo',
       maxWidth: 500,
@@ -210,7 +214,6 @@ const Updateprofile = ({navigation}) => {
       } else if (Response.error) {
         console.log('ImagePicker Error: ', Response.error);
       } else {
-        openModel1(false);
         setsignatureimgUri(Response.assets[0].uri);
         const source =
           Platform.OS === 'android'
@@ -223,13 +226,15 @@ const Updateprofile = ({navigation}) => {
           name: name,
           type: type,
         };
-        formData.append('sign', file);
+        if (file) {
+          formData.append('sign', file);
+        }
       }
     });
   };
 
   const handleTakePhotoSignature = () => {
-    setopenModel(false);
+    setopenModel1(false);
     const options = {
       mediaType: 'photo',
       maxWidth: 500,
@@ -245,7 +250,7 @@ const Updateprofile = ({navigation}) => {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
-        openModel1(false);
+
         const source =
           Platform.OS === 'android'
             ? Response.assets[0].uri
@@ -258,7 +263,9 @@ const Updateprofile = ({navigation}) => {
           type: type,
         };
 
-        formData.append('sign', file);
+        if (file) {
+          formData.append('sign', file);
+        }
       }
     });
   };

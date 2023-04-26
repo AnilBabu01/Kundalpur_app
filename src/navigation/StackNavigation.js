@@ -16,15 +16,20 @@ import UpdateprofileScreen from '../screens/Profile/Updateprofile';
 import CompleteProfileScreen from '../screens/Profile/CompleteProfile';
 import ViewReceiptScreen from '../screens/History/ViewReceipt';
 import {donationavtivebtn} from '../utils/Colors';
+import {useDispatch} from 'react-redux';
+import {loadUser} from '../Redux/action/AuthAction';
 const Stack = createNativeStackNavigator();
 
 function StackNavigation() {
+  const dispatch = useDispatch();
   const [showsplash, setshowsplash] = useState(true);
   useEffect(() => {
+    dispatch(loadUser());
     setTimeout(() => {
       setshowsplash(false);
     }, 2000);
   }, []);
+
   return (
     <Stack.Navigator screenOptions={{headerShown: false}}>
       {showsplash && <Stack.Screen name="OnBoarding" component={Splash} />}

@@ -28,6 +28,8 @@ import {
 } from '../../utils/Colors';
 import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import {useDispatch, useSelector} from 'react-redux';
+import {loadUser} from '../../Redux/action/AuthAction';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const data = [
@@ -72,10 +74,10 @@ const donationAmounts = [
 ];
 
 function Donation() {
+  const dispatch = useDispatch();
   const [openModel, setopenModel] = useState(false);
   const [someone, setsomeone] = useState('');
   const [mode, setmode] = useState('online');
-  const [user, setuser] = useState('');
   const [title, settitle] = useState('');
   const [fullname, setfullname] = useState('');
   const [address, setaddress] = useState('');
@@ -226,20 +228,15 @@ function Donation() {
     } catch (error) {}
   };
 
-  const getProfile = () => {
-    try {
-      serverInstance(`user/profile-list`, 'get').then(res => {
-        if (res?.profile) {
-          setuser(res?.profile);
-        }
-      });
-    } catch (error) {}
-  };
   useEffect(() => {
+    setInterval(() => {
+      dispatch(loadUser());
+    }, 1000);
+
     getall_donatiions();
-    getProfile();
   }, []);
-  useEffect(() => {}, [user]);
+
+  const {user} = useSelector(state => state.userReducer);
 
   const renderItem = item => {
     return (

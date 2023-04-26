@@ -11,24 +11,17 @@ import {useNavigation} from '@react-navigation/native';
 import {serverInstance} from '../../API/ServerInstance';
 import {backendUrl} from '../../Config/config';
 import profileimg from '../../assets/profileimg.jpg';
+import {useSelector, useDispatch} from 'react-redux';
+import {loadUser} from '../../Redux/action/AuthAction';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const ProfileHeader = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [user, setuser] = useState('');
-
-  const getProfile = () => {
-    try {
-      serverInstance(`user/profile-list`, 'get').then(res => {
-        if (res?.profile) {
-          setuser(res?.profile);
-        }
-      });
-    } catch (error) {}
-  };
+  const {user} = useSelector(state => state.userReducer);
 
   useEffect(() => {
-    getProfile();
+    dispatch(loadUser());
   }, []);
 
   return (

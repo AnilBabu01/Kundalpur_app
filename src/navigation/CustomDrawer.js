@@ -4,13 +4,14 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {View, Text, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {donationavtivebtn} from '../utils/Colors';
-import {serverInstance} from '../API/ServerInstance';
+import {useSelector, useDispatch} from 'react-redux';
+import {loadUser} from '../Redux/action/AuthAction';
 import {backendUrl} from '../Config/config';
 import Loader from '../Conponents/Loader';
 import profileimg from '../assets/profileimg.jpg';
 function CustomDrawer(props) {
   const {navigation} = props;
-  const [user, setuser] = useState('');
+  const dispatch = useDispatch();
   const [visible, setvisible] = useState(false);
   const [message, setmessage] = useState('');
   const logout = async () => {
@@ -21,24 +22,17 @@ function CustomDrawer(props) {
       navigation.navigate('Login');
       navigation.closeDrawer();
       setvisible(false);
+      dispatch(loadUser());
     } catch (error) {
       console.log(error);
       setvisible(false);
     }
   };
-  const getProfile = () => {
-    try {
-      serverInstance(`user/profile-list`, 'get').then(res => {
-        if (res?.profile) {
-          setuser(res?.profile);
-        }
-      });
-    } catch (error) {}
-  };
+
+  const {user} = useSelector(state => state.userReducer);
   useEffect(() => {
-    getProfile();
+    dispatch(loadUser());
   }, []);
-  useEffect(() => {}, [user]);
 
   return (
     <DrawerContentScrollView

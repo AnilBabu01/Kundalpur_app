@@ -897,11 +897,11 @@ const styles = StyleSheet.create({
   AmoutBtnActive: {
     color: '#fff',
     fontWeight: 'bold',
-    fontSize: 11,
+    fontSize: 12,
   },
   UnAmountBtn: {
     color: 'black',
     fontWeight: 'bold',
-    fontSize: 11,
+    fontSize: 12,
   },
 });

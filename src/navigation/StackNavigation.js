@@ -39,7 +39,21 @@ function StackNavigation() {
       <Stack.Screen name="Forgot" component={ForgotpasswordScreen} />
       <Stack.Screen name="ForgotVerify" component={VerificationForgotScreen} />
       <Stack.Screen name="ForgotReset" component={ResetPasswordScreen} />
-      <Stack.Screen name="Changepassword" component={ChangePasswordScreen} />
+      <Stack.Screen
+        name="Changepassword"
+        component={ChangePasswordScreen}
+        options={{
+          headerShown: true,
+          title: 'Edit Profile',
+          headerStyle: {
+            backgroundColor: donationavtivebtn,
+          },
+          headerTintColor: '#fff',
+          headerTitleStyle: {
+            fontWeight: 'bold',
+          },
+        }}
+      />
       <Stack.Screen
         name="Profiles"
         component={ProfileScreen}

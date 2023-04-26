@@ -13,14 +13,20 @@ import Profileactive from '../assets/Profileactive.png';
 import Donation from '../assets/Donation.png';
 import Donationactive from '../assets/Donationactive.png';
 import history from '../assets/history.png';
-import historyactive from '../assets/historyactive.png';
+import historyactive from '../assets/histortActive.png';
 import HomeScreen from '../screens/Home';
 import DonationScreen from '../screens/Donation/Donation';
 import YoutubeScreen from '../screens/Youtube/Youtube';
 import HistroryScreen from '../screens/History/Histrory';
 import RoomMainScreen from '../screens/RoomBooking/RoomMain';
 import {useTheme} from 'react-native-paper';
-
+import {
+  primary,
+  secondary,
+  textcolor,
+  donationavtivebtn,
+  donationbtnunactiveborder,
+} from '../utils/Colors';
 const Tab = createMaterialBottomTabNavigator();
 
 function TabNavigation() {
@@ -28,7 +34,7 @@ function TabNavigation() {
   theme.colors.secondaryContainer = 'transperent';
   return (
     <Tab.Navigator
-      activeColor="#FE7600"
+      activeColor={donationavtivebtn}
       inactiveColor="#747474"
       barStyle={{backgroundColor: '#F4F4F4'}}
       shifting={false}>

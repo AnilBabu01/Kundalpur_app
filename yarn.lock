@@ -6196,6 +6196,11 @@ react-native-otp-form@^1.1.2:
   resolved "https://registry.npmjs.org/react-native-otp-form/-/react-native-otp-form-1.1.2.tgz"
   integrity sha512-EAN4W+l1tm2JOaI6I+/rgpKkRqr7kMmNmAtUG+WU4ct+OB+syvFLnpRnPXMmPowU9DrvZ06ZBWu4RudyHNvE4g==
 
+react-native-otp-verify@^1.0.5:
+  version "1.0.5"
+  resolved "https://registry.npmjs.org/react-native-otp-verify/-/react-native-otp-verify-1.0.5.tgz"
+  integrity sha512-CCOdORCxKF3qTGk6JPdULFP8egvBnRjy6Bm8G8/OaCxDUpwUC9IQdyVY3wK7OCPRD+B/I0H93VPXPD3OI8Q65w==
+
 react-native-pager-view@*, "react-native-pager-view@>= 4.0.0":
   version "6.2.0"
   resolved "https://registry.npmjs.org/react-native-pager-view/-/react-native-pager-view-6.2.0.tgz"

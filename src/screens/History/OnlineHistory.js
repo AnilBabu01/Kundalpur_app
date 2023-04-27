@@ -16,11 +16,15 @@ const OnlineHistory = () => {
     serverInstance('user/donation-list', 'get').then(res => {
       if (res.donation) {
         setvisible(false);
-        setisData(res.donation);
+        let filterData = res.donation.filter(
+          item => item.MODE_OF_DONATION === 'ONLINE',
+        );
+        setisData(filterData);
       }
     });
   };
 
+  console.log(isData);
   useEffect(() => {
     gettable();
   }, []);

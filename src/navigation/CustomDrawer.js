@@ -31,9 +31,12 @@ function CustomDrawer(props) {
 
   const {user} = useSelector(state => state.userReducer);
   useEffect(() => {
-    dispatch(loadUser());
+    setTimeout(() => {
+      dispatch(loadUser());
+    }, 100);
   }, []);
 
+  console.log('user fromj cur ', user);
   return (
     <DrawerContentScrollView
       style={{backgroundColor: donationavtivebtn, color: 'black'}}

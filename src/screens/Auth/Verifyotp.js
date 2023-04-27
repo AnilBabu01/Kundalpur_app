@@ -17,6 +17,7 @@ import loginicon from '../../assets/loginiconss.png';
 import {primary, secondary, textcolor} from '../../utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../Conponents/Loader';
+import RNOtpVerify from 'react-native-otp-verify';
 
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -71,6 +72,40 @@ const Verifyotp = ({navigation}) => {
       setvisible(false);
     }
   };
+
+  useEffect(() => {
+    // docs: https://github.com/faizalshap/react-native-otp-verify
+    RNOtpVerify.getOtp()
+      .then(p =>
+        RNOtpVerify.addListener(message => {
+          try {
+            if (message) {
+              const messageArray = message.split('\n');
+              if (messageArray[2]) {
+                const otp = messageArray[2].split(' ')[0];
+                console.log('auto fetch otp : ', otp);
+                // if (otp.length === 6) {
+                //   setOtpArray(otp.split(''));
+                // }
+              }
+            }
+          } catch (error) {
+            console.log(
+              error.message,
+              'RNOtpVerify.getOtp - read message, OtpVerification',
+            );
+          }
+        }),
+      )
+      .catch(error => {
+        console.log(error.message, 'RNOtpVerify.getOtp, OtpVerification');
+      });
+
+    // remove listener on unmount
+    return () => {
+      RNOtpVerify.removeListener();
+    };
+  }, []);
 
   useEffect(() => {
     setmobilemo(route.params?.mobile);

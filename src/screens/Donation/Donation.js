@@ -229,10 +229,9 @@ function Donation() {
   };
 
   useEffect(() => {
-    setInterval(() => {
+    setTimeout(() => {
       dispatch(loadUser());
-    }, 1000);
-
+    }, 100);
     getall_donatiions();
   }, []);
 

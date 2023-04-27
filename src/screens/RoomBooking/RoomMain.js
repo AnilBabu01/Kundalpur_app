@@ -25,6 +25,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import {Dropdown} from 'react-native-element-dropdown';
 import moment from 'moment';
+import Dharamcard from './Dharamcard';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 const data = [
@@ -78,9 +79,9 @@ const RoomMain = () => {
   };
   return (
     <SafeAreaView>
+      <ProfileHeader />
       <ScrollView>
         <View>
-          <ProfileHeader />
           <View style={styles.connainer}>
             <View>
               <Image source={imgformover} style={styles.imgstyle} />
@@ -214,7 +215,51 @@ const RoomMain = () => {
                 onConfirm={handleConfirm1}
                 onCancel={hideDatePicker1}
               />
+              <Text style={styles.labelText}>
+                <Ionicons
+                  name="person"
+                  color={donationavtivebtn}
+                  size={20}
+                  style={{marginRight: 20}}
+                />
+                <Text>Room for</Text>
+              </Text>
+
+              <Dropdown
+                style={styles.dropdown}
+                placeholderStyle={styles.placeholderStyle}
+                selectedTextStyle={styles.selectedTextStyle}
+                inputSearchStyle={styles.inputSearchStyle}
+                iconStyle={styles.iconStyle}
+                data={data}
+                maxHeight={300}
+                labelField="label"
+                valueField="label"
+                placeholder="Select"
+                value={dharamshalaname}
+                onChange={item => {
+                  setdharamshalaname(item.label);
+                }}
+                renderItem={renderItem1}
+              />
+
+              <View style={styles.loginbtndiv}>
+                <TouchableOpacity>
+                  <View style={styles.loginbtn}>
+                    <Text style={styles.logintextstyle}>Login</Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
             </View>
+            <Text style={styles.textdharamText}>Kundalpur Dharamshala</Text>
+          </View>
+          <View style={styles.dharamMainView}>
+            <Dharamcard />
+            <Dharamcard />
+            <Dharamcard />
+            <Dharamcard />
+            <Dharamcard />
+            <Dharamcard />
           </View>
         </View>
       </ScrollView>
@@ -235,15 +280,16 @@ const styles = StyleSheet.create({
   },
   formView: {
     position: 'relative',
-    top: '-24%',
+    top: '-18%',
     backgroundColor: '#FFFFFF',
     width: '90%',
     left: '5%',
     borderRadius: 10,
+    marginBottom: '-20%',
   },
   texttopView: {
     position: 'relative',
-    top: '-32%',
+    top: '-22%',
     width: '90%',
     left: '5%',
   },
@@ -256,6 +302,7 @@ const styles = StyleSheet.create({
     color: donationavtivebtn,
     textAlign: 'center',
     fontSize: 20,
+    marginTop: 5,
   },
   labelText: {
     marginLeft: '5%',
@@ -303,5 +350,39 @@ const styles = StyleSheet.create({
   inputSearchStyle: {
     height: 40,
     fontSize: 16,
+  },
+  loginbtn: {
+    width: Width(295),
+    height: Height(45),
+    backgroundColor: textcolor,
+    borderRadius: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loginbtndiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    margin: Height(15),
+  },
+  logintextstyle: {
+    color: 'white',
+    fontWeight: 700,
+    fontSize: 25,
+    lineHeight: 42,
+  },
+  dharamMainView: {
+    margin: 10,
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    flexWrap: 'wrap',
+  },
+  textdharamText: {
+    textAlign: 'center',
+    fontSize: 22,
+    color: donationavtivebtn,
+    fontWeight: 500,
   },
 });

@@ -17,6 +17,7 @@ import loginicon from '../../assets/loginiconss.png';
 import {primary, secondary, textcolor} from '../../utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../Conponents/Loader';
+
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const Verifyotp = ({navigation}) => {
@@ -74,7 +75,7 @@ const Verifyotp = ({navigation}) => {
   useEffect(() => {
     setmobilemo(route.params?.mobile);
   }, []);
-
+  console.log('anil', otp);
   return (
     <ScrollView>
       <View>
@@ -87,6 +88,7 @@ const Verifyotp = ({navigation}) => {
             <Text style={styles.textwe}>We have send the OTP to Your</Text>
             <Text style={styles.textwe}>mobile number</Text>
             <Text style={styles.textwenum}>{mobilemo && mobilemo}</Text>
+            <Text>{otp}</Text>
           </View>
           <OTP
             codeCount={6}
@@ -94,6 +96,7 @@ const Verifyotp = ({navigation}) => {
             onFinish={text => setotp(text)}
             keyboardType="number-pad"
           />
+
           <View style={styles.loginbtndiv}>
             <TouchableOpacity onPress={() => handleVerify()}>
               <View style={styles.loginbtn}>

@@ -292,7 +292,7 @@ function Donation() {
                     marginLeft: '20%',
                     fontWeight: '600',
                     // fontStyle: 'italic',
-                    color: {donationavtivebtn},
+                    color: donationavtivebtn,
                     fontSize: 20,
                   }}>
                   Online Donation

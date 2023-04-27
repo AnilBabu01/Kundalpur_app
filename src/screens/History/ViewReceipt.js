@@ -39,8 +39,17 @@ const ViewReceipt = () => {
             <Text>{item?.NAME}</Text>
           </View>
           <View style={styles.viewdel}>
+            <Text>Address</Text>
+            <Text>{item?.ADDRESS}</Text>
+          </View>
+          <View style={styles.viewdel}>
             <Text>Donation Type</Text>
             <Text>{item?.MODE_OF_DONATION}</Text>
+          </View>
+
+          <View style={styles.viewdel}>
+            <Text>Receipt no</Text>
+            <Text>{item?.RECEIPT_NO}</Text>
           </View>
           <View style={styles.viewdel}>
             <Text>Amount</Text>
@@ -55,6 +64,17 @@ const ViewReceipt = () => {
             <Text>Donation Date</Text>
             <Text> {moment(item?.DATE_OF_DAAN).format('DD/MM/YYYY')}</Text>
           </View>
+          certificate
+          
+          <View style={styles.viewdel}>
+            <Text>Status</Text>
+            <Text>
+           
+              {item?.PAYMENT_STATUS === true
+                ? 'Payment succrssfull'
+                : 'Payment failed'}
+            </Text>
+          </View>
         </View>
       </View>
     </ScrollView>
@@ -64,6 +84,9 @@ const ViewReceipt = () => {
 export default ViewReceipt;
 
 const styles = StyleSheet.create({
+  connainer: {
+    margin: 10,
+  },
   card10: {
     backgroundColor: 'white',
     borderRadius: 8,

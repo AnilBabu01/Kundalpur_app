@@ -20,6 +20,7 @@ const windowHeight = Dimensions.get('window').height;
 const HistoryCard = ({item}) => {
   const navigation = useNavigation();
 
+  console.log(item);
   return (
     <ScrollView>
       <View style={styles.connainer}>
@@ -33,8 +34,8 @@ const HistoryCard = ({item}) => {
             <Text>{item?.NAME}</Text>
           </View>
           <View style={styles.viewdel}>
-            <Text>Donation Type</Text>
-            <Text>{item?.MODE_OF_DONATION}</Text>
+            <Text>Receipt no</Text>
+            <Text>{item?.RECEIPT_NO}</Text>
           </View>
           <View style={styles.viewdel}>
             <Text>Head</Text>

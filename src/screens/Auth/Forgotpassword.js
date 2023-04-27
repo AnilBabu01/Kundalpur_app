@@ -21,7 +21,7 @@ const Forgotpassword = ({navigation}) => {
   const [showloginoption, setshowloginoption] = useState(false);
   return (
     <SafeAreaView>
-      <StatusBar backgroundColor={'#FB9034'} />
+      <StatusBar backgroundColor={textcolor} />
       <ScrollView>
         <View style={styles.connainer}>
           <Image source={loginicon} style={styles.imgtop} />

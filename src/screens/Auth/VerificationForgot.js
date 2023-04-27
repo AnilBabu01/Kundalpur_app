@@ -32,7 +32,7 @@ const VerificationForgot = ({navigation}) => {
           <OTP
             codeCount={6}
             containerStyle={{marginTop: 30, marginBottom: 80}}
-            otpStyles={{backgroundColor: '#e'}}
+            // otpStyles={{backgroundColor: '#e'}}
           />
           <View style={styles.loginbtndiv}>
             <TouchableOpacity

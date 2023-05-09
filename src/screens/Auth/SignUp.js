@@ -16,6 +16,7 @@ import {Height, Width} from '../../utils/responsive';
 import loginicon from '../../assets/loginiconss.png';
 import {primary, secondary, textcolor} from '../../utils/Colors';
 import {serverInstance} from '../../API/ServerInstance';
+import Toast from 'react-native-toast-message';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const SignUp = ({navigation}) => {
@@ -53,11 +54,19 @@ const SignUp = ({navigation}) => {
       })
         .then(res => {
           if (res.status === true) {
-            createThreeButtonAlert(res.msg);
+            Toast.show({
+              type: 'success',
+              text1: 'Success',
+              text2: res.msg,
+            });
             navigation.navigate('Login');
           }
           if (res.status === 0) {
-            createThreeButtonAlert(res.message);
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: res.message,
+            });
           }
         })
         .catch(error => {

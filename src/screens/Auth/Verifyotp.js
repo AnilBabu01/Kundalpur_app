@@ -18,7 +18,7 @@ import {primary, secondary, textcolor} from '../../utils/Colors';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Loader from '../../Conponents/Loader';
 import RNOtpVerify from 'react-native-otp-verify';
-
+import Toast from 'react-native-toast-message';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const Verifyotp = ({navigation}) => {
@@ -28,15 +28,6 @@ const Verifyotp = ({navigation}) => {
   const [mobilemo, setmobilemo] = useState('');
   const [otp, setotp] = useState('');
 
-  const createThreeButtonAlert = title =>
-    Alert.alert('Authentication', title, [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
   const handleVerify = () => {
     try {
       setvisible(true);
@@ -48,7 +39,12 @@ const Verifyotp = ({navigation}) => {
         .then(async res => {
           if (res.tokens) {
             await AsyncStorage.setItem('token', res.tokens.access.token);
-            createThreeButtonAlert('You Have Login Successfully');
+
+            Toast.show({
+              type: 'success',
+              text1: 'Success',
+              text2: 'You have login successfully!',
+            });
             setvisible(false);
             if (res.user?.name === null) {
               navigation.navigate('CompleteProfile');
@@ -59,7 +55,11 @@ const Verifyotp = ({navigation}) => {
             console.log(res.user?.name);
           }
           if (res.code === 406) {
-            createThreeButtonAlert(res.message);
+            Toast.show({
+              type: 'error',
+              text1: 'Error',
+              text2: res.message,
+            });
             setvisible(false);
           }
         })

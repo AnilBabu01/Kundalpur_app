@@ -24,7 +24,6 @@ import {
   secondary,
   textcolor,
   donationavtivebtn,
-  donationbtnunactiveborder,
 } from '../../utils/Colors';
 import Loader from '../../Conponents/Loader';
 import Toast from 'react-native-toast-message';
@@ -41,15 +40,7 @@ const Login = ({navigation}) => {
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
   const [mobile, setmobile] = useState('');
-  const createThreeButtonAlert = title =>
-    Alert.alert('Authentication', title, [
-      {
-        text: 'Cancel',
-        onPress: () => console.log('Cancel Pressed'),
-        style: 'cancel',
-      },
-      {text: 'OK', onPress: () => console.log('OK Pressed')},
-    ]);
+
   const handlelogin = async () => {
     try {
       if (showloginoption === false) {
@@ -82,11 +73,19 @@ const Login = ({navigation}) => {
         })
           .then(res => {
             if (res.status === 1) {
-              createThreeButtonAlert('OTP Sent Successfully');
+              Toast.show({
+                type: 'success',
+                text1: 'Success',
+                text2: 'You have login successfully!',
+              });
               navigation.navigate('Verifyotp', {mobile});
               setvisible(false);
             } else {
-              createThreeButtonAlert(res.message);
+              Toast.show({
+                type: 'error',
+                text1: 'Error',
+                text2: res.message,
+              });
               setvisible(false);
             }
           })

@@ -8,7 +8,6 @@ import {
 import React, {useState, useEffect} from 'react';
 import Logo from '../../assets/logo1.png';
 import {useNavigation} from '@react-navigation/native';
-import {serverInstance} from '../../API/ServerInstance';
 import {backendUrl} from '../../Config/config';
 import profileimg from '../../assets/profileimg.jpg';
 import {useSelector, useDispatch} from 'react-redux';

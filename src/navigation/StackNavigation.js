@@ -15,6 +15,8 @@ import ChangePasswordScreen from '../screens/Auth/ChangePassword';
 import UpdateprofileScreen from '../screens/Profile/Updateprofile';
 import CompleteProfileScreen from '../screens/Profile/CompleteProfile';
 import ViewReceiptScreen from '../screens/History/ViewReceipt';
+import ViewDharamDetailsScreen from '../screens/RoomBooking/ViewDharamDetails';
+import PaymentSuccessScreen from '../screens/Donation/PaymentSuccess';
 import {donationavtivebtn} from '../utils/Colors';
 import {useDispatch} from 'react-redux';
 import {loadUser} from '../Redux/action/AuthAction';
@@ -112,6 +114,8 @@ function StackNavigation() {
           },
         }}
       />
+      <Stack.Screen name="DharamDetails" component={ViewDharamDetailsScreen} />
+      <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} />
     </Stack.Navigator>
   );
 }

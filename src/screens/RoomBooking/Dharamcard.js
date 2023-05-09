@@ -17,9 +17,11 @@ import {
   donationbtnunactiveborder,
 } from '../../utils/Colors';
 import {Height, Width} from '../../utils/responsive';
+import {useNavigation} from '@react-navigation/native';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
 const Dharamcard = () => {
+  const navigation = useNavigation();
   return (
     <View>
       <View style={styles.maincard}>
@@ -30,7 +32,8 @@ const Dharamcard = () => {
         </Text>
         <Text>Lala Umrav Singh Jain Dharmshala </Text>
         <View style={styles.loginbtndiv}>
-          <TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('DharamDetails')}>
             <View style={styles.loginbtn}>
               <Text style={styles.logintextstyle}>Details</Text>
             </View>

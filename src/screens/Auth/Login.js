@@ -27,6 +27,7 @@ import {
   donationbtnunactiveborder,
 } from '../../utils/Colors';
 import Loader from '../../Conponents/Loader';
+import Toast from 'react-native-toast-message';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const Login = ({navigation}) => {
@@ -61,9 +62,15 @@ const Login = ({navigation}) => {
 
         if (res.data.status) {
           await AsyncStorage.setItem('token', res.data.tokens.access.token);
-          createThreeButtonAlert('You have login successfully');
+
+          Toast.show({
+            type: 'success',
+            text1: 'Success',
+            text2: 'You have login successfully!',
+          });
           navigation.navigate('Drawer');
           setvisible(false);
+        } else {
         }
       }
       if (showloginoption === true) {
@@ -89,7 +96,11 @@ const Login = ({navigation}) => {
           });
       }
     } catch (error) {
-      createThreeButtonAlert('Wrong email or password');
+      Toast.show({
+        type: 'error',
+        text1: 'Error',
+        text2: 'Wrong email or password',
+      });
       setvisible(false);
     }
   };

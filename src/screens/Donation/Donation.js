@@ -30,6 +30,8 @@ import {launchCamera, launchImageLibrary} from 'react-native-image-picker';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadUser} from '../../Redux/action/AuthAction';
+import moment from 'moment';
+const formData = new FormData();
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const data = [
@@ -73,7 +75,7 @@ const donationAmounts = [
   },
 ];
 
-function Donation() {
+function Donation({navigation}) {
   const dispatch = useDispatch();
   const [openModel, setopenModel] = useState(false);
   const [someone, setsomeone] = useState('');
@@ -93,6 +95,7 @@ function Donation() {
   const [headError, setheadError] = useState('');
   const [amountError, setamountError] = useState('');
   const [titleError, settitleError] = useState('');
+  const [bankname, setbankname] = useState('');
   var today = new Date();
   let h = today.getHours();
   let m = today.getMinutes();
@@ -106,7 +109,7 @@ function Donation() {
         MODE_OF_DONATION: 1,
         AMOUNT: amount,
         DATE_OF_DAAN: new Date(),
-        PAYMENT_ID: '111111',
+        PAYMENT_ID: '',
         TYPE: head,
         REMARK: remark,
         ADDRESS: address,
@@ -115,6 +118,7 @@ function Donation() {
       })
         .then(async res => {
           if (res.status === true) {
+            // navigation.navigate('PaymentSuccess');
             const url =
               'https://paymentkundalpur.techjainsupport.co.in/about?order_id=' +
               res.data.id;
@@ -122,6 +126,31 @@ function Donation() {
             await Linking.openURL(url);
           }
           console.log(res);
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    }
+
+    if (mode === 'cheque' && amount) {
+      formData.append(
+        'NAME',
+        someone === 'yes1' && user.name ? user.name : fullname,
+      );
+      formData.append('MODE_OF_DONATION', mode === 'online' ? 1 : 2);
+      formData.append('AMOUNT', amount);
+      formData.append('DATE_OF_CHEQUE', chequedate.toString());
+      formData.append('NAME_OF_BANK', bankname);
+      formData.append('DATE_OF_DAAN', new Date());
+      formData.append('TYPE', head);
+      formData.append('REMARK', remark);
+      formData.append('ADDRESS', address);
+      formData.append('CHEQUE_NO', chequeno);
+      formData.append('MobileNo', user?.mobileNo);
+      formData.append('TIME_OF_DAAN', currTime);
+      serverInstance('user/add-donation', 'POST', formData)
+        .then(async res => {
+          console.log(formData);
         })
         .catch(error => {
           console.log(error);
@@ -146,6 +175,21 @@ function Donation() {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setchequeimg(Response.assets[0].uri);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+
+        if (file != null) {
+          formData.append('chequeImg', file);
+        }
       }
     });
   };
@@ -167,6 +211,20 @@ function Donation() {
         console.log('ImagePicker Error: ', Response.error);
       } else {
         setchequeimg(Response.assets[0].uri);
+        const source =
+          Platform.OS === 'android'
+            ? Response.assets[0].uri
+            : Response.assets[0].uri.replace('file://', '');
+        const name = Response.assets[0].fileName;
+        const type = Response.assets[0].type;
+        const file = {
+          uri: source,
+          name: name,
+          type: type,
+        };
+        if (file != null) {
+          formData.append('chequeImg', file);
+        }
       }
     });
   };
@@ -580,6 +638,8 @@ function Donation() {
                         paddingHorizontal: Width(30),
                         fontSize: Height(16),
                       }}
+                      value={chequeno}
+                      onChangeText={Text => setchequeno(Text)}
                     />
                   </View>
                   <Text
@@ -601,6 +661,8 @@ function Donation() {
                         paddingHorizontal: Width(30),
                         fontSize: Height(16),
                       }}
+                      value={bankname}
+                      onChangeText={text => setbankname(text)}
                     />
                   </View>
                   <Text
@@ -631,7 +693,9 @@ function Donation() {
                         fontSize: Height(16),
                         marginLeft: Width(20),
                       }}>
-                      {' Choose Date'}
+                      {chequedate
+                        ? moment(chequedate).format('DD/MM/YYYY')
+                        : 'Choose Date'}
                     </Text>
                   </TouchableOpacity>
                   <DateTimePickerModal

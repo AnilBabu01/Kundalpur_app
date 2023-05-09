@@ -6,16 +6,14 @@ import {
   SafeAreaView,
   ScrollView,
   Dimensions,
-  TextInput,
   TouchableOpacity,
+  Modal,
 } from 'react-native';
 import React, {useState} from 'react';
 import {Height, Width} from '../../utils/responsive';
 import ProfileHeader from '../ProfileHeader/ProfileHeader';
 import imgformover from '../../assets/imgformover.jpeg';
 import {
-  primary,
-  secondary,
   textcolor,
   donationavtivebtn,
   donationbtnunactiveborder,
@@ -27,7 +25,6 @@ import {Dropdown} from 'react-native-element-dropdown';
 import moment from 'moment';
 import Dharamcard from './Dharamcard';
 const windowHeight = Dimensions.get('window').height;
-const windowWidth = Dimensions.get('window').width;
 const data = [
   {label: 'श्री', value: '1'},
   {label: 'श्रीमति', value: '2'},
@@ -36,6 +33,7 @@ const data = [
 ];
 const RoomMain = () => {
   const [index, setIndex] = useState(0);
+  const [openModel, setopenModel] = useState(false);
   const [checkin, setcheckin] = useState('');
   const [checkout, setcheckout] = useState('');
   const [dharamshalaname, setdharamshalaname] = useState('');
@@ -80,6 +78,14 @@ const RoomMain = () => {
   return (
     <SafeAreaView>
       <ProfileHeader />
+      <Modal animationType={'fade'} transparent={true} visible={openModel}>
+        <View style={[styles.modal, styles.elevation]}>
+          <Text style={styles.canceltext} onPress={() => setopenModel(false)}>
+            <Ionicons name="close-outline" size={40} />
+          </Text>
+          <View style={styles.chooseview}></View>
+        </View>
+      </Modal>
       <ScrollView>
         <View>
           <View style={styles.connainer}>
@@ -189,7 +195,7 @@ const RoomMain = () => {
                   marginTop: Height(10),
                 }}
                 onPress={() => {
-                  setIndex(6), showDatePicker();
+                  setIndex(6), showDatePicker1();
                 }}>
                 <FontAwesome5
                   name="calendar"
@@ -224,29 +230,44 @@ const RoomMain = () => {
                 />
                 <Text>Room for</Text>
               </Text>
-
-              <Dropdown
-                style={styles.dropdown}
-                placeholderStyle={styles.placeholderStyle}
-                selectedTextStyle={styles.selectedTextStyle}
-                inputSearchStyle={styles.inputSearchStyle}
-                iconStyle={styles.iconStyle}
-                data={data}
-                maxHeight={300}
-                labelField="label"
-                valueField="label"
-                placeholder="Select"
-                value={dharamshalaname}
-                onChange={item => {
-                  setdharamshalaname(item.label);
+              <TouchableOpacity
+                style={{
+                  height: Height(50),
+                  width: '90%',
+                  borderWidth: 1.5,
+                  borderColor:
+                    index === 6 ? donationbtnunactiveborder : '#a9a9a9',
+                  alignSelf: 'center',
+                  borderRadius: Width(10),
+                  flexDirection: 'row',
+                  alignItems: 'center',
+                  marginTop: Height(10),
                 }}
-                renderItem={renderItem1}
-              />
-
+                onPress={() => {
+                  setIndex(6), setopenModel(true);
+                }}>
+                <Ionicons
+                  name="caret-down-outline"
+                  color="#666666"
+                  style={{marginLeft: Width(30)}}
+                  size={20}
+                />
+                <Text
+                  style={{
+                    textAlign: 'center',
+                    fontFamily: 'Gilroy-SemiBold',
+                    fontSize: Height(16),
+                    marginLeft: Width(20),
+                  }}>
+                  Select
+                </Text>
+              </TouchableOpacity>
               <View style={styles.loginbtndiv}>
                 <TouchableOpacity>
                   <View style={styles.loginbtn}>
-                    <Text style={styles.logintextstyle}>Login</Text>
+                    <Text style={styles.logintextstyle}>
+                      Check Availability
+                    </Text>
                   </View>
                 </TouchableOpacity>
               </View>
@@ -384,5 +405,33 @@ const styles = StyleSheet.create({
     fontSize: 22,
     color: donationavtivebtn,
     fontWeight: 500,
+  },
+  modal: {
+    backgroundColor: 'white',
+    width: '90%',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#fff',
+    marginTop: '50%',
+    marginLeft: 20,
+    padding: 10,
+  },
+  elevation: {
+    shadowColor: '#52006A',
+    elevation: 20,
+  },
+  chooseview: {
+    display: 'flex',
+    justifyContent: 'space-around',
+    alignItems: 'center',
+    marginBottom: 10,
+    marginBottom: 20,
+    flexDirection: 'row',
+    paddingLeft: 10,
+    paddingRight: 10,
+  },
+  canceltext: {
+    textAlign: 'right',
+    color: donationavtivebtn,
   },
 });

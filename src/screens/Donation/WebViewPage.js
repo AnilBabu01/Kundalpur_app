@@ -109,6 +109,10 @@ function WebViewPage({route, navigation}) {
       navigation.navigate('PaymentSuccess', {
         objJson: getData,
       });
+    } else {
+      navigation.navigate('PaymentSuccess', {
+        objJson: '',
+      });
     }
     // console.log('trUrl status : ', trUrlStatus);
 

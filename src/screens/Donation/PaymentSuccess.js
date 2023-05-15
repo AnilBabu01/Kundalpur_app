@@ -5,16 +5,35 @@ import {
   Dimensions,
   TouchableOpacity,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-const windowWidth = Dimensions.get('window').width;
-const windowHeight = Dimensions.get('window').height;
+import {serverInstance} from '../../API/ServerInstance';
 import {Height, Width} from '../../utils/responsive';
 import {textcolor} from '../../utils/Colors';
+const windowWidth = Dimensions.get('window').width;
+const windowHeight = Dimensions.get('window').height;
 export default function PaymentSuccess({navigation, route}) {
   const [transactionId, settransactionId] = useState(true);
+  const [donationDeatils, setDonationDetails] = useState(null);
 
-  console.log(route.params.objJson);
+  useEffect(() => {
+    if (route.params?.objJson) {
+      settransactionId(true);
+      serverInstance(`admin/donation-list`, 'get')
+        .then(res => {
+          if (res.status) {
+            setDonationDetails(res.data[0]);
+
+            console.log(res.data[0]);
+          }
+        })
+        .catch(error => {});
+    }
+    if (route.params?.objJson === '') {
+      settransactionId(false);
+    }
+  }, []);
+
   return (
     <View style={styles.mainsuccess}>
       <View style={styles.profile}>
@@ -35,7 +54,6 @@ export default function PaymentSuccess({navigation, route}) {
         {transactionId ? (
           <View>
             <Text style={{color: '#11b411'}}>Payment Success</Text>
-            <Text>{route.params.objJson}</Text>
           </View>
         ) : (
           <View>
@@ -45,10 +63,12 @@ export default function PaymentSuccess({navigation, route}) {
 
         {transactionId ? (
           <View>
-            <Text style={styles.donatonText}>Donated ₹11</Text>
+            <Text style={styles.donatonText}>
+              Donated ₹{donationDeatils?.AMOUNT}
+            </Text>
             <Text>
               Thank you for your donation. Your transaction has been completed
-              with Order Number: online000021
+              with Order Number: {donationDeatils?.RECEIPT_NO}
             </Text>
             <View style={styles.btnView}>
               <TouchableOpacity>

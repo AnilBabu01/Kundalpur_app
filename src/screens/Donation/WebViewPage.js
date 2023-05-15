@@ -92,35 +92,32 @@ function WebViewPage({route, navigation}) {
 
   const onNavigationStateChange = navState => {
     console.log('WebView onNavigationStateChange url = ', navState.url);
-    // if (
-    //   navState.url === params.redirect_url ||
-    //   navState.url === params.cancel_url
-    // ) {
-    //   console.log('trUrl = ', navState.url);
-    //   // webview.injectJavaScript(pucJavaScript);
-    //   webview.stopLoading();
-    // }
+    if (
+      navState.url === params.redirect_url ||
+      navState.url === params.cancel_url
+    ) {
+      console.log('trUrl = ', navState.url);
+      webview.injectJavaScript(pucJavaScript);
+      webview.stopLoading();
+    }
   };
 
   const _onMessage = event => {
     var getData = event.nativeEvent.data;
     console.log('handled _onMessage : ', getData);
     if (getData != null) {
+      // Alert.alert('Success', getData);
       navigation.navigate('PaymentSuccess', {
         objJson: getData,
       });
-    } else {
+    }
+    console.log('trUrl status : ', trUrlStatus);
+
+    if (trUrlStatus === 'T') {
       navigation.navigate('PaymentSuccess', {
-        objJson: '',
+        objJson: getData,
       });
     }
-    // console.log('trUrl status : ', trUrlStatus);
-
-    // if (trUrlStatus === 'T') {
-    //   navigation.navigate('Status', {
-    //     objJson: getData,
-    //   });
-    // }
   };
 
   const jsCode = `    
@@ -201,14 +198,18 @@ function WebViewPage({route, navigation}) {
 
         onShouldStartLoadWithRequest={request => {
           console.log('onShouldStartLoadWithRequest: ', request);
-          const {url} = request;
+
           console.log('onShouldStartLoadWithRequest Url: ', url);
-          if (url === params.redirect_url || url === params.cancel_url) {
-            // setTrUrl(navState.url);
-            // setTrUrlStatus('T');
-            // webview.injectJavaScript(pucJavaScript);
-            //webview.stopLoading();
-            // return false;
+          if (
+            request?.url === params.redirect_url ||
+            request?.url === params.cancel_url
+          ) {
+            setTrUrl(navState.url);
+            setTrUrlStatus('T');
+
+            webview.injectJavaScript(pucJavaScript);
+            webview.stopLoading();
+            return false;
           }
           return true;
         }}

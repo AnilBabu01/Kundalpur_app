@@ -103,7 +103,6 @@ function Donation({navigation}) {
   let s = today.getSeconds();
   const currTime = `${h}:${m}:${s}`;
   const payclicked = () => {
-    setLoading(true);
     var formdata = new FormData();
     formdata.append('amount', amount);
 
@@ -116,14 +115,13 @@ function Donation({navigation}) {
       .then(data => {
         // console.log("data is " + data.plain)
         if (data.status_message == 'SUCCESS') {
-          navigation.navigate('WebView', {
-            response: data,
-          });
+          // navigation.navigate('WebView', {
+          //   response: data,
+          // });
         }
       })
       .catch(function (error) {
         console.log('Settings Axios error : ', error);
-        setLoading(false);
       });
   };
   const handlesubmit = async () => {

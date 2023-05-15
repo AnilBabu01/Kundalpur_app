@@ -17,8 +17,7 @@ import CompleteProfileScreen from '../screens/Profile/CompleteProfile';
 import ViewReceiptScreen from '../screens/History/ViewReceipt';
 import ViewDharamDetailsScreen from '../screens/RoomBooking/ViewDharamDetails';
 import PaymentSuccessScreen from '../screens/Donation/PaymentSuccess';
-import WebViewPage from '../screens/Donation/webview_page';
-
+import WebViewPage from '../screens/Donation/WebViewPage';
 import {donationavtivebtn} from '../utils/Colors';
 import {useDispatch} from 'react-redux';
 import {loadUser} from '../Redux/action/AuthAction';

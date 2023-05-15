@@ -11,8 +11,10 @@ const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 import {Height, Width} from '../../utils/responsive';
 import {textcolor} from '../../utils/Colors';
-export default function PaymentSuccess({navigation}) {
+export default function PaymentSuccess({navigation, route}) {
   const [transactionId, settransactionId] = useState(true);
+
+  console.log(route.params.objJson);
   return (
     <View style={styles.mainsuccess}>
       <View style={styles.profile}>
@@ -33,6 +35,7 @@ export default function PaymentSuccess({navigation}) {
         {transactionId ? (
           <View>
             <Text style={{color: '#11b411'}}>Payment Success</Text>
+            <Text>{route.params.objJson}</Text>
           </View>
         ) : (
           <View>

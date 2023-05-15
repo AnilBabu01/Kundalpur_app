@@ -6,7 +6,7 @@
  * @flow strict-local
  */
 
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   SafeAreaView,
   ScrollView,
@@ -27,6 +27,7 @@ import {AvenueParams} from './params';
 //import CustomWebView from './customWebView';
 
 function WebViewPage({route, navigation}) {
+  const webView = useRef();
   const [visible, setVisible] = useState(true);
   const [trUrlStatus, setTrUrlStatus] = useState('');
   const [trUrl, setTrUrl] = useState('');
@@ -91,49 +92,48 @@ function WebViewPage({route, navigation}) {
 
   const onNavigationStateChange = navState => {
     console.log('WebView onNavigationStateChange url = ', navState.url);
-    if (
-      navState.url === params.redirect_url ||
-      navState.url === params.cancel_url
-    ) {
-      console.log('trUrl = ', navState.url);
-      webview.injectJavaScript(pucJavaScript);
-      webview.stopLoading();
-    }
+    // if (
+    //   navState.url === params.redirect_url ||
+    //   navState.url === params.cancel_url
+    // ) {
+    //   console.log('trUrl = ', navState.url);
+    //   // webview.injectJavaScript(pucJavaScript);
+    //   webview.stopLoading();
+    // }
   };
 
   const _onMessage = event => {
     var getData = event.nativeEvent.data;
     console.log('handled _onMessage : ', getData);
     if (getData != null) {
-      Alert.alert('Success', getData);
       navigation.navigate('PaymentSuccess', {
         objJson: getData,
       });
     }
-    console.log('trUrl status : ', trUrlStatus);
+    // console.log('trUrl status : ', trUrlStatus);
 
-    if (trUrlStatus === 'T') {
-      navigation.navigate('PaymentSuccess', {
-        objJson: getData,
-      });
-    }
+    // if (trUrlStatus === 'T') {
+    //   navigation.navigate('Status', {
+    //     objJson: getData,
+    //   });
+    // }
   };
 
   const jsCode = `    
-    var interval = setInterval(function(){
-      var sourceCode = document.getElementsByTagName('body')[0].innerHTML.toString()
-      
-      //if(sourceCode.indexOf('shopping with us.')>-1){        
-        window.ReactNativeWebView.postMessage(sourceCode)
-        clearInterval(interval);
-      //}
-    },1000);`;
+   var interval = setInterval(function(){
+     var sourceCode = document.getElementsByTagName('body')[0].innerHTML.toString()
+     
+     //if(sourceCode.indexOf('shopping with us.')>-1){        
+       window.ReactNativeWebView.postMessage(sourceCode)
+       clearInterval(interval);
+     //}
+   },1000);`;
 
   const pucJavaScript = `
-      var sourceCode = document.getElementsByName('encResp')[0].value;
-      window.ReactNativeWebView.postMessage(sourceCode);
-    //window.ReactNativeWebView.postMessage(JSON.stringify(window.location));
-       `;
+     var sourceCode = document.getElementsByName('encResp')[0].value;
+     window.ReactNativeWebView.postMessage(sourceCode);
+   //window.ReactNativeWebView.postMessage(JSON.stringify(window.location));
+      `;
 
   // let web_url = "https://test.ccavenue.com/transaction/transaction.do";
   // let commamd = "initiateTransaction";
@@ -174,7 +174,7 @@ function WebViewPage({route, navigation}) {
     <SafeAreaView style={{flex: 1}}>
       <WebView
         automaticallyAdjustContentInsets={false}
-        ref={ref => setWebView(ref)}
+        ref={webView}
         source={{
           //  uri: 'https://test.ccavenue.com/transaction/transaction.do?command=initiateTransaction&access_code=AVLA00EA83AK67ALKA&encRequest=30bff25ea5c49f9296fd2b9d9f09050798d54e45fcd7090edfcd0ca8469fa5430521c2aa02a5b49be67e52b287628ef85bf415338c6bbf844b732cc288c9941b2ee780dc2ade04d08de53ba6a47f554be9a066caec65c596831e7edb21ad234ce74d9cea4bd4647171e091c9bdf7d8c1550e99e1f6bdc8b812bf55e4a44325b0bd709f722e6b1a50285f54ef6c0502a07bcc8a62219749eb73522553e0518c540ff0e7b71d46e570330b17b9c4f9ba506c42227dc294ad369f49b83db527be43ba8cd36b96be7f88eaf61d984458edb0487a0c7aec71d3f38db75006d5d2b134b72bb08180caa532fb88b788fadb3268129008168451f0a157fc87639954c226'
           html: loadHtml(),
@@ -202,8 +202,7 @@ function WebViewPage({route, navigation}) {
           if (url === params.redirect_url || url === params.cancel_url) {
             // setTrUrl(navState.url);
             // setTrUrlStatus('T');
-
-            webview.injectJavaScript(pucJavaScript);
+            // webview.injectJavaScript(pucJavaScript);
             //webview.stopLoading();
             // return false;
           }
@@ -216,7 +215,7 @@ function WebViewPage({route, navigation}) {
         // }}
 
         // startInLoadingStateSS
-        onNavigationStateChange={onNavigationStateChange}
+        // onNavigationStateChange={onNavigationStateChange}
         renderLoading={ActivityIndicatorElement}
         onLoad={() => setVisible(false)}
       />

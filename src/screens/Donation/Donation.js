@@ -113,11 +113,12 @@ function Donation({navigation}) {
     fetch(AvenueParams.merchant_server_enc_url, requestOptions)
       .then(response => response.json())
       .then(data => {
-        // console.log("data is " + data.plain)
         if (data.status_message == 'SUCCESS') {
-          // navigation.navigate('WebView', {
-          //   response: data,
-          // });
+          navigation.navigate('WebView', {
+            response: data,
+          });
+
+          console.log('data is ', data);
         }
       })
       .catch(function (error) {

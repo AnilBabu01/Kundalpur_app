@@ -31,6 +31,7 @@ import Ionicons from 'react-native-vector-icons/Ionicons';
 import {useDispatch, useSelector} from 'react-redux';
 import {loadUser} from '../../Redux/action/AuthAction';
 import moment from 'moment';
+import {AvenueParams} from './params';
 const formData = new FormData();
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
@@ -101,7 +102,30 @@ function Donation({navigation}) {
   let m = today.getMinutes();
   let s = today.getSeconds();
   const currTime = `${h}:${m}:${s}`;
+  const payclicked = () => {
+    setLoading(true);
+    var formdata = new FormData();
+    formdata.append('amount', amount);
 
+    const requestOptions = {
+      method: 'POST',
+      body: formdata,
+    };
+    fetch(AvenueParams.merchant_server_enc_url, requestOptions)
+      .then(response => response.json())
+      .then(data => {
+        // console.log("data is " + data.plain)
+        if (data.status_message == 'SUCCESS') {
+          navigation.navigate('WebView', {
+            response: data,
+          });
+        }
+      })
+      .catch(function (error) {
+        console.log('Settings Axios error : ', error);
+        setLoading(false);
+      });
+  };
   const handlesubmit = async () => {
     if (mode === 'online' && amount) {
       serverInstance('user/add-donation', 'POST', {
@@ -118,12 +142,7 @@ function Donation({navigation}) {
       })
         .then(async res => {
           if (res.status === true) {
-            // navigation.navigate('PaymentSuccess');
-            const url =
-              'https://paymentkundalpur.techjainsupport.co.in/about?order_id=' +
-              res.data.id;
-            const supported = await Linking.canOpenURL(url);
-            await Linking.openURL(url);
+            payclicked();
           }
           console.log(res);
         })

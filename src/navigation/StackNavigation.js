@@ -17,6 +17,8 @@ import CompleteProfileScreen from '../screens/Profile/CompleteProfile';
 import ViewReceiptScreen from '../screens/History/ViewReceipt';
 import ViewDharamDetailsScreen from '../screens/RoomBooking/ViewDharamDetails';
 import PaymentSuccessScreen from '../screens/Donation/PaymentSuccess';
+import WebViewPage from '../screens/Donation/webview_page';
+
 import {donationavtivebtn} from '../utils/Colors';
 import {useDispatch} from 'react-redux';
 import {loadUser} from '../Redux/action/AuthAction';
@@ -116,6 +118,12 @@ function StackNavigation() {
       />
       <Stack.Screen name="DharamDetails" component={ViewDharamDetailsScreen} />
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccessScreen} />
+
+      <Stack.Screen
+        name="WebView"
+        component={WebViewPage}
+        options={{title: 'Webview', headerShown: false}}
+      />
     </Stack.Navigator>
   );
 }

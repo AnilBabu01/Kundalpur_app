@@ -20,13 +20,7 @@ import YoutubeScreen from '../screens/Youtube/Youtube';
 import HistroryScreen from '../screens/History/Histrory';
 import RoomMainScreen from '../screens/RoomBooking/RoomMain';
 import {useTheme} from 'react-native-paper';
-import {
-  primary,
-  secondary,
-  textcolor,
-  donationavtivebtn,
-  donationbtnunactiveborder,
-} from '../utils/Colors';
+import {donationavtivebtn} from '../utils/Colors';
 const Tab = createMaterialBottomTabNavigator();
 
 function TabNavigation() {

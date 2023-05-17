@@ -117,8 +117,6 @@ function Donation({navigation}) {
           navigation.navigate('WebView', {
             response: data,
           });
-
-          console.log('data is ', data);
         }
       })
       .catch(function (error) {
@@ -143,7 +141,6 @@ function Donation({navigation}) {
           if (res.status === true) {
             payclicked();
           }
-          console.log(res);
         })
         .catch(error => {
           console.log(error);
@@ -168,7 +165,7 @@ function Donation({navigation}) {
       formData.append('TIME_OF_DAAN', currTime);
       serverInstance('user/add-donation', 'POST', formData)
         .then(async res => {
-          console.log(formData);
+          console.log(res);
         })
         .catch(error => {
           console.log(error);

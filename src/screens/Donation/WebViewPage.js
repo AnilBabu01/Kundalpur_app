@@ -106,35 +106,35 @@ function WebViewPage({route, navigation}) {
     var getData = event.nativeEvent.data;
     console.log('handled _onMessage : ', getData);
     if (getData != null) {
-      // Alert.alert('Success', getData);
+      Alert.alert('Success', getData);
       navigation.navigate('PaymentSuccess', {
         objJson: getData,
       });
     }
-    console.log('trUrl status : ', trUrlStatus);
+    // console.log('trUrl status : ', trUrlStatus);
 
-    if (trUrlStatus === 'T') {
-      navigation.navigate('PaymentSuccess', {
-        objJson: getData,
-      });
-    }
+    // if (trUrlStatus === 'T') {
+    //   navigation.navigate('Status', {
+    //     objJson: getData,
+    //   });
+    // }
   };
 
   const jsCode = `    
-   var interval = setInterval(function(){
-     var sourceCode = document.getElementsByTagName('body')[0].innerHTML.toString()
-     
-     //if(sourceCode.indexOf('shopping with us.')>-1){        
-       window.ReactNativeWebView.postMessage(sourceCode)
-       clearInterval(interval);
-     //}
-   },1000);`;
+    var interval = setInterval(function(){
+      var sourceCode = document.getElementsByTagName('body')[0].innerHTML.toString()
+      
+      //if(sourceCode.indexOf('shopping with us.')>-1){        
+        window.ReactNativeWebView.postMessage(sourceCode)
+        clearInterval(interval);
+      //}
+    },1000);`;
 
   const pucJavaScript = `
-     var sourceCode = document.getElementsByName('encResp')[0].value;
-     window.ReactNativeWebView.postMessage(sourceCode);
-   //window.ReactNativeWebView.postMessage(JSON.stringify(window.location));
-      `;
+      var sourceCode = document.getElementsByName('encResp')[0].value;
+      window.ReactNativeWebView.postMessage(sourceCode);
+    //window.ReactNativeWebView.postMessage(JSON.stringify(window.location));
+       `;
 
   // let web_url = "https://test.ccavenue.com/transaction/transaction.do";
   // let commamd = "initiateTransaction";
@@ -198,18 +198,15 @@ function WebViewPage({route, navigation}) {
 
         onShouldStartLoadWithRequest={request => {
           console.log('onShouldStartLoadWithRequest: ', request);
-
+          const {url} = request;
           console.log('onShouldStartLoadWithRequest Url: ', url);
-          if (
-            request?.url === params.redirect_url ||
-            request?.url === params.cancel_url
-          ) {
-            setTrUrl(navState.url);
-            setTrUrlStatus('T');
+          if (url === params.redirect_url || url === params.cancel_url) {
+            // setTrUrl(navState.url);
+            // setTrUrlStatus('T');
 
             webview.injectJavaScript(pucJavaScript);
-            webview.stopLoading();
-            return false;
+            //webview.stopLoading();
+            // return false;
           }
           return true;
         }}

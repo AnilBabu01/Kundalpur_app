@@ -30,11 +30,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import moment from 'moment';
 import Loader from '../../Conponents/Loader';
+import {useDispatch} from 'react-redux';
+import {loadUser} from '../../Redux/action/AuthAction';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const formData = new FormData();
 const CompleteProfile = ({navigation}) => {
   const route = useRoute();
+  const dispatch = useDispatch();
   const [visible, setvisible] = useState(false);
   const [message, setmessage] = useState('');
   const [imageUri, setImageUri] = useState('');
@@ -52,7 +55,6 @@ const CompleteProfile = ({navigation}) => {
   const [index, setIndex] = useState(0);
   const [user, setuser] = useState('');
 
-  console.log(user);
   const getProfile = () => {
     try {
       serverInstance(`user/profile-list`, 'get').then(res => {
@@ -94,6 +96,7 @@ const CompleteProfile = ({navigation}) => {
       );
 
       if (res.data.status) {
+        dispatch(loadUser());
         setvisible(false);
         setmessage('');
         navigation.navigate('Donation');
@@ -121,7 +124,6 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleConfirm = date => {
-    console.log('A date has been picked: ', JSON.stringify(date));
     hideDatePicker();
     setanniversary(date);
   };
@@ -137,7 +139,6 @@ const CompleteProfile = ({navigation}) => {
   };
 
   const handleConfirmdob = date => {
-    console.log('A date has been picked: ', JSON.stringify(date));
     hideDatePickerdob();
     setdateofbirth(date);
   };
@@ -154,9 +155,7 @@ const CompleteProfile = ({navigation}) => {
 
     launchImageLibrary(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
 
@@ -191,9 +190,7 @@ const CompleteProfile = ({navigation}) => {
 
     launchCamera(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
         const source =
@@ -227,9 +224,7 @@ const CompleteProfile = ({navigation}) => {
 
     launchImageLibrary(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
         const source =
@@ -262,9 +257,7 @@ const CompleteProfile = ({navigation}) => {
 
     launchCamera(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
 

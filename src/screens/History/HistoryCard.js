@@ -20,7 +20,6 @@ const windowHeight = Dimensions.get('window').height;
 const HistoryCard = ({item}) => {
   const navigation = useNavigation();
 
-  console.log(item);
   return (
     <ScrollView>
       <View style={styles.connainer}>

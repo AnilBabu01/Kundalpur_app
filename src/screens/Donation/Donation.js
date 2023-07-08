@@ -102,10 +102,10 @@ function Donation({navigation}) {
   let m = today.getMinutes();
   let s = today.getSeconds();
   const currTime = `${h}:${m}:${s}`;
-  const payclicked = () => {
+  const payclicked = RECEIPT_NO => {
     var formdata = new FormData();
     formdata.append('amount', amount);
-
+    formdata.append('order_id', RECEIPT_NO);
     const requestOptions = {
       method: 'POST',
       body: formdata,
@@ -139,7 +139,7 @@ function Donation({navigation}) {
       })
         .then(async res => {
           if (res.status === true) {
-            payclicked();
+            payclicked(res?.data?.RECEIPT_NO);
           }
         })
         .catch(error => {
@@ -185,7 +185,6 @@ function Donation({navigation}) {
 
     launchImageLibrary(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
         console.log('ImagePicker Error: ', Response.error);
       } else {
@@ -221,9 +220,7 @@ function Donation({navigation}) {
 
     launchCamera(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setchequeimg(Response.assets[0].uri);
         const source =
@@ -254,7 +251,6 @@ function Donation({navigation}) {
   };
 
   const handleConfirm = date => {
-    console.log('A date has been picked: ', date);
     hideDatePicker();
     setchequedate(date);
   };

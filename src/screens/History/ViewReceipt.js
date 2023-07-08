@@ -25,7 +25,6 @@ const ViewReceipt = () => {
     setitem(route.params?.item);
   }, [item]);
 
-  console.log('data from view', item);
   return (
     <ScrollView>
       <View style={styles.connainer}>

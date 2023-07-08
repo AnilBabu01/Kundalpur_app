@@ -1,31 +1,15 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
 import React, {useState, useEffect, useRef} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
-  Text,
   ActivityIndicator,
   BackHandler,
   useColorScheme,
   View,
   Alert,
 } from 'react-native';
-import {cos} from 'react-native-reanimated';
 import WebView from 'react-native-webview';
-//import { WebView } from 'react-native';
-
 import {AvenueParams} from './params';
-//import CustomWebView from './customWebView';
-
 function WebViewPage({route, navigation}) {
   const webView = useRef();
   const [visible, setVisible] = useState(true);
@@ -41,7 +25,7 @@ function WebViewPage({route, navigation}) {
     redirect_url: route.params.response.redirect_url,
     order_id: route.params.response.order_id,
   };
-
+  console.log('params', params);
   let payload = {
     command: 'initiateTransaction',
     encRequest: route.params.response.enc_val,
@@ -57,14 +41,12 @@ function WebViewPage({route, navigation}) {
   };
 
   function handleBackButtonClick() {
-    // console.log("back Pressed wow")
     Alert.alert(
       'Exit',
       'Do you really want to cancel this transaction?',
       [
         {
           text: 'Cancel',
-          onPress: () => console.log('Cancel Pressed'),
           style: 'cancel',
         },
         {
@@ -103,8 +85,9 @@ function WebViewPage({route, navigation}) {
   };
 
   const _onMessage = event => {
+    console.log('on Message data is ', event);
     var getData = event.nativeEvent.data;
-    console.log('handled _onMessage : ', getData);
+
     if (getData != null) {
       Alert.alert('Success', getData);
       navigation.navigate('PaymentSuccess', {

@@ -24,7 +24,6 @@ const OnlineHistory = () => {
     });
   };
 
-  console.log(isData);
   useEffect(() => {
     gettable();
   }, []);

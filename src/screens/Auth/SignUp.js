@@ -17,9 +17,13 @@ import loginicon from '../../assets/loginiconss.png';
 import {primary, secondary, textcolor} from '../../utils/Colors';
 import {serverInstance} from '../../API/ServerInstance';
 import Toast from 'react-native-toast-message';
+import Loader from '../../Conponents/Loader';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
+
 const SignUp = ({navigation}) => {
+  const [visible, setvisible] = useState(false);
+  const [message, setmessage] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(true);
   const [passwordVisible1, setPasswordVisible1] = useState(true);
   const [fullname, setfullname] = useState('');
@@ -46,6 +50,8 @@ const SignUp = ({navigation}) => {
 
   const hanldlesubmit = () => {
     if ((fullname, phoneno, email, password, repassword)) {
+      setvisible(true);
+      setmessage('Account Creating...');
       serverInstance('user/create-account', 'POST', {
         fullname: fullname,
         mobileno: phoneno,
@@ -59,7 +65,12 @@ const SignUp = ({navigation}) => {
               text1: 'Success',
               text2: res.msg,
             });
-            navigation.navigate('Login');
+            navigation.navigate('Login', {
+              email: email,
+              password: password,
+            });
+            setvisible(false);
+            setmessage('');
           }
           if (res.status === 0) {
             Toast.show({
@@ -67,10 +78,14 @@ const SignUp = ({navigation}) => {
               text1: 'Error',
               text2: res.message,
             });
+            setvisible(false);
+            setmessage('');
           }
         })
         .catch(error => {
           console.log(error);
+          setvisible(false);
+          setmessage('');
         });
     }
   };
@@ -404,6 +419,7 @@ const SignUp = ({navigation}) => {
           </Text>
         </View>
       </ScrollView>
+      <Loader visible={visible} message={message} />
     </SafeAreaView>
   );
 };

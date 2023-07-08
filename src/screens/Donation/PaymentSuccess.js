@@ -23,8 +23,6 @@ export default function PaymentSuccess({navigation, route}) {
         .then(res => {
           if (res.status) {
             setDonationDetails(res.data[0]);
-
-            console.log(res.data[0]);
           }
         })
         .catch(error => {});
@@ -34,6 +32,15 @@ export default function PaymentSuccess({navigation, route}) {
     }
   }, []);
 
+  const CallStatusApi = () => {
+    serverInstance(`admin/donation-list`, 'get')
+      .then(res => {
+        if (res.status) {
+          setDonationDetails(res.data[0]);
+        }
+      })
+      .catch(error => {});
+  };
   return (
     <View style={styles.mainsuccess}>
       <View style={styles.profile}>

@@ -18,22 +18,30 @@ import {
 } from '../../utils/Colors';
 import {Height, Width} from '../../utils/responsive';
 import {useNavigation} from '@react-navigation/native';
+import {backendUrl} from '../../Config/config';
 const windowHeight = Dimensions.get('window').height;
 const windowWidth = Dimensions.get('window').width;
-const Dharamcard = () => {
+const Dharamcard = ({data}) => {
   const navigation = useNavigation();
+  console.log('from dharam', data);
+  let dharamId = data?.dharmasala_id;
   return (
     <View>
       <View style={styles.maincard}>
-        <Image source={dharm} style={styles.dharming} />
+        <Image
+          source={{
+            uri: `${backendUrl}uploads/images/${data?.image1}`,
+          }}
+          style={styles.dharming}
+        />
         <Text style={styles.labelText}>
           <Ionicons name="location" color={donationavtivebtn} size={20} />
           Kundalpur
         </Text>
-        <Text>Lala Umrav Singh Jain Dharmshala </Text>
+        <Text style={styles.labelText}>{data?.name}</Text>
         <View style={styles.loginbtndiv}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('DharamDetails')}>
+            onPress={() => navigation.navigate('DharamDetails', {dharamId})}>
             <View style={styles.loginbtn}>
               <Text style={styles.logintextstyle}>Details</Text>
             </View>

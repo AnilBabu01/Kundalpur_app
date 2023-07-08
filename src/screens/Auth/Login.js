@@ -27,9 +27,14 @@ import {
 } from '../../utils/Colors';
 import Loader from '../../Conponents/Loader';
 import Toast from 'react-native-toast-message';
+import {useRoute} from '@react-navigation/native';
+import {useDispatch} from 'react-redux';
+import {loadUser} from '../../Redux/action/AuthAction';
 const windowWidth = Dimensions.get('window').width;
 const windowHeight = Dimensions.get('window').height;
 const Login = ({navigation}) => {
+  const route = useRoute();
+  const dispatch = useDispatch();
   const [visible, setvisible] = useState(false);
   const [message, setmessage] = useState('');
   const [passwordVisible, setPasswordVisible] = useState(true);
@@ -53,7 +58,7 @@ const Login = ({navigation}) => {
 
         if (res.data.status) {
           await AsyncStorage.setItem('token', res.data.tokens.access.token);
-
+          dispatch(loadUser());
           Toast.show({
             type: 'success',
             text1: 'Success',
@@ -76,7 +81,7 @@ const Login = ({navigation}) => {
               Toast.show({
                 type: 'success',
                 text1: 'Success',
-                text2: 'You have login successfully!',
+                text2: 'You OPT Sent successfully!',
               });
               navigation.navigate('Verifyotp', {mobile});
               setvisible(false);
@@ -110,7 +115,7 @@ const Login = ({navigation}) => {
     console.log({email});
     console.log({password});
     var emailValid = false;
-    if (email.length == 0) {
+    if (email?.length == 0) {
       setEmailError('Email is required');
     } else if (!reg.test(email)) {
       setEmailError('Please enter valid email address');
@@ -120,9 +125,9 @@ const Login = ({navigation}) => {
     }
 
     var passwordValid = false;
-    if (password.length == 0) {
+    if (password?.length == 0) {
       setPasswordError('Password is required');
-    } else if (password.length < 6) {
+    } else if (password?.length < 6) {
       setPasswordError('Password should be minimum 6 characters');
     } else {
       setPasswordError('');
@@ -137,6 +142,10 @@ const Login = ({navigation}) => {
   };
   useEffect(() => {
     gettoken();
+    setEmail(route.params?.email);
+    setPassword(route.params?.password);
+
+    console.log(route.params?.email);
   }, []);
 
   return (
@@ -239,6 +248,7 @@ const Login = ({navigation}) => {
                   marginTop: Height(10),
                   borderColor: index === 1 ? textcolor : '#a9a9a9',
                 }}
+                value={email}
                 onBlur={() => Validation()}
                 onChangeText={text => setEmail(text)}
                 keyboardType="email-address"
@@ -287,6 +297,7 @@ const Login = ({navigation}) => {
                     paddingHorizontal: Width(30),
                     fontSize: Height(16),
                   }}
+                  value={password}
                   secureTextEntry={passwordVisible}
                   onBlur={() => Validation()}
                   onChangeText={text => setPassword(text)}

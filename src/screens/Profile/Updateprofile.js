@@ -11,8 +11,6 @@ import {
 } from 'react-native';
 import {Height, Width} from '../../utils/responsive';
 import {
-  primary,
-  secondary,
   textcolor,
   donationavtivebtn,
   donationbtnunactiveborder,
@@ -24,17 +22,18 @@ import profileimgss from '../../assets/profileimg.jpg';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {useRoute} from '@react-navigation/native';
-import {serverInstance} from '../../API/ServerInstance';
 import {backendUrl, backendApiUrl} from '../../Config/config';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import moment from 'moment';
 import Loader from '../../Conponents/Loader';
-const windowWidth = Dimensions.get('window').width;
+import {useDispatch} from 'react-redux';
+import {loadUser} from '../../Redux/action/AuthAction';
 const windowHeight = Dimensions.get('window').height;
 const formData = new FormData();
 const Updateprofile = ({navigation}) => {
   const route = useRoute();
+  const dispatch = useDispatch();
   const [visible, setvisible] = useState(false);
   const [message, setmessage] = useState('');
   const [imageUri, setImageUri] = useState('');
@@ -57,7 +56,6 @@ const Updateprofile = ({navigation}) => {
       setvisible(true);
       setmessage('Profile Updating.....');
       let token = await AsyncStorage.getItem('token');
-      console.log('ss');
       formData.append('name', fullnamde);
       formData.append('mobile', mobile);
       formData.append('email', email);
@@ -76,10 +74,10 @@ const Updateprofile = ({navigation}) => {
         config,
       );
       if (res.data.status) {
+        dispatch(loadUser());
         setvisible(false);
         setmessage('');
         navigation.navigate('Donation');
-        console.log('updatwe', res.data);
       }
     } catch (error) {}
   };
@@ -93,7 +91,7 @@ const Updateprofile = ({navigation}) => {
     setdateofbirth(user?.dob);
     setanniversary(user?.anniversary_date);
   }, [user]);
-  console.log(user);
+
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
   const showDatePicker = () => {
@@ -105,7 +103,6 @@ const Updateprofile = ({navigation}) => {
   };
 
   const handleConfirm = date => {
-    console.log('A date has been picked: ', date);
     hideDatePicker();
     setanniversary(date);
   };
@@ -121,7 +118,6 @@ const Updateprofile = ({navigation}) => {
   };
 
   const handleConfirmdob = date => {
-    console.log('A date has been picked: ', date);
     hideDatePickerdob();
     setdateofbirth(date);
   };
@@ -138,9 +134,7 @@ const Updateprofile = ({navigation}) => {
 
     launchImageLibrary(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
 
@@ -174,9 +168,7 @@ const Updateprofile = ({navigation}) => {
 
     launchCamera(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setImageUri(Response.assets[0].uri);
         const source =
@@ -210,9 +202,7 @@ const Updateprofile = ({navigation}) => {
 
     launchImageLibrary(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
         const source =
@@ -245,9 +235,7 @@ const Updateprofile = ({navigation}) => {
 
     launchCamera(options, Response => {
       if (Response.didCancel) {
-        console.log('User cancelled image picker');
       } else if (Response.error) {
-        console.log('ImagePicker Error: ', Response.error);
       } else {
         setsignatureimgUri(Response.assets[0].uri);
 
